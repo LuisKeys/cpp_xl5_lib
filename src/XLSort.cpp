@@ -10,7 +10,7 @@ void merge_results(int left_index, int middle_index, int right_index) {
 	int right_n = right_index - middle_index;
 
 	float* left = new float[left_n + 1];
-	float* right = new float[left_n + 1];
+	float* right = new float[right_n + 1];
 
 	for(int i = 0; i < left_n; ++i)
 		left[i] = _input[left_index + i - 1];
@@ -21,9 +21,15 @@ void merge_results(int left_index, int middle_index, int right_index) {
 	left[left_n] = std::numeric_limits<float>::max();
 	right[right_n] = std::numeric_limits<float>::max();
 
-	int i = 1, j = 1;
+	XLLog log;
+	log.line("");
+	log.line("Indexes:");
+	log.array("left", left, left_n + 1);
+	log.array("right", right, right_n + 1);
 
-	for(int k = left_index; k <= right_index; ++k) {
+	int i = 0, j = 0;
+
+	for(int k = left_index - 1; k < right_index; ++k) {
 		if(left[i] <= right[j]) {
 			_input[k] = left[i];
 			i++;
@@ -33,12 +39,15 @@ void merge_results(int left_index, int middle_index, int right_index) {
 			j++;
 		}
 	}
+	delete left;
+	delete right;
 }
 
 void merge_sort(int left_index, int right_index) {
 	if(left_index < right_index) {
-		float float_middle = (left_index + right_index) / 2.0;		
+		float float_middle = (float)(left_index + right_index) / 2.0;		
 		int middle_index = (int)float_middle;
+
 		merge_sort(left_index, middle_index);
 		merge_sort(middle_index + 1, right_index);
 		merge_results(left_index, middle_index, right_index);
@@ -47,8 +56,8 @@ void merge_sort(int left_index, int right_index) {
 
 void sort_m(float * input, int len) {
 	_input = input;
-	int left_index = 0;
-	int right_index = len - 1;
+	int left_index = 1;
+	int right_index = len;
 	merge_sort(left_index, right_index);
 }
 

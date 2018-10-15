@@ -150,6 +150,33 @@ src/XLLog.cpp.s:
 	$(MAKE) -f CMakeFiles/cpp_xl_lib.dir/build.make CMakeFiles/cpp_xl_lib.dir/src/XLLog.cpp.s
 .PHONY : src/XLLog.cpp.s
 
+src/XLSort.o: src/XLSort.cpp.o
+
+.PHONY : src/XLSort.o
+
+# target to build an object file
+src/XLSort.cpp.o:
+	$(MAKE) -f CMakeFiles/cpp_xl_lib.dir/build.make CMakeFiles/cpp_xl_lib.dir/src/XLSort.cpp.o
+.PHONY : src/XLSort.cpp.o
+
+src/XLSort.i: src/XLSort.cpp.i
+
+.PHONY : src/XLSort.i
+
+# target to preprocess a source file
+src/XLSort.cpp.i:
+	$(MAKE) -f CMakeFiles/cpp_xl_lib.dir/build.make CMakeFiles/cpp_xl_lib.dir/src/XLSort.cpp.i
+.PHONY : src/XLSort.cpp.i
+
+src/XLSort.s: src/XLSort.cpp.s
+
+.PHONY : src/XLSort.s
+
+# target to generate assembly for a file
+src/XLSort.cpp.s:
+	$(MAKE) -f CMakeFiles/cpp_xl_lib.dir/build.make CMakeFiles/cpp_xl_lib.dir/src/XLSort.cpp.s
+.PHONY : src/XLSort.cpp.s
+
 src/XLSummary.o: src/XLSummary.cpp.o
 
 .PHONY : src/XLSummary.o
@@ -216,6 +243,9 @@ help:
 	@echo "... src/XLLog.o"
 	@echo "... src/XLLog.i"
 	@echo "... src/XLLog.s"
+	@echo "... src/XLSort.o"
+	@echo "... src/XLSort.i"
+	@echo "... src/XLSort.s"
 	@echo "... src/XLSummary.o"
 	@echo "... src/XLSummary.i"
 	@echo "... src/XLSummary.s"

@@ -17,6 +17,12 @@ void XLLog::function_end(const std::string& input) {
 	std::cout << "In: " << elapsed_secs << " s" << std::endl;
 }
 
-void XLLog::int_value(const std::string& description, int value) {	
+void XLLog::value(const std::string& description, int value) {	
 	std::cout << description << ":" << value << std::endl;
+}
+
+void XLLog::array(const std::string& description, float * value, int len) {	
+	for(int i = 0; i < len; ++i) {
+		std::cout << description << "[" << i << "]" << " = " << value[i] << std::endl;	
+	}	
 }

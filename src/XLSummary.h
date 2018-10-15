@@ -2,5 +2,6 @@
 
 class XLSummary {
 	public:
-		int xlmax(int * input, int len);
+		int max(int * input, int len);
+		int sum(int * input, int len);
 };

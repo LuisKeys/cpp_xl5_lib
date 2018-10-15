@@ -123,6 +123,33 @@ cpp_xl_lib/fast:
 	$(MAKE) -f CMakeFiles/cpp_xl_lib.dir/build.make CMakeFiles/cpp_xl_lib.dir/build
 .PHONY : cpp_xl_lib/fast
 
+src/XLLog.o: src/XLLog.cpp.o
+
+.PHONY : src/XLLog.o
+
+# target to build an object file
+src/XLLog.cpp.o:
+	$(MAKE) -f CMakeFiles/cpp_xl_lib.dir/build.make CMakeFiles/cpp_xl_lib.dir/src/XLLog.cpp.o
+.PHONY : src/XLLog.cpp.o
+
+src/XLLog.i: src/XLLog.cpp.i
+
+.PHONY : src/XLLog.i
+
+# target to preprocess a source file
+src/XLLog.cpp.i:
+	$(MAKE) -f CMakeFiles/cpp_xl_lib.dir/build.make CMakeFiles/cpp_xl_lib.dir/src/XLLog.cpp.i
+.PHONY : src/XLLog.cpp.i
+
+src/XLLog.s: src/XLLog.cpp.s
+
+.PHONY : src/XLLog.s
+
+# target to generate assembly for a file
+src/XLLog.cpp.s:
+	$(MAKE) -f CMakeFiles/cpp_xl_lib.dir/build.make CMakeFiles/cpp_xl_lib.dir/src/XLLog.cpp.s
+.PHONY : src/XLLog.cpp.s
+
 src/XLSummary.o: src/XLSummary.cpp.o
 
 .PHONY : src/XLSummary.o
@@ -186,6 +213,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... cpp_xl_lib"
 	@echo "... edit_cache"
+	@echo "... src/XLLog.o"
+	@echo "... src/XLLog.i"
+	@echo "... src/XLLog.s"
 	@echo "... src/XLSummary.o"
 	@echo "... src/XLSummary.i"
 	@echo "... src/XLSummary.s"

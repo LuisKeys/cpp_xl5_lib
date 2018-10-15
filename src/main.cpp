@@ -1,24 +1,26 @@
 #include <iostream>
+#include <cmath>
 #include "XLLog.h"
 #include "XLSummary.h"
-
-#define N1 100000
 
 int main(int argc, char** argv)
 {
 
   XLSummary summary;  
 
-  int* numbers = new int[N1];
+  int num_elements = pow(10, 6);
 
-  for(int i = 0; i < N1; ++i) {
+  int* numbers = new int[num_elements];
+
+  for(int i = 0; i < num_elements; ++i) {
     numbers[i] = i;
   }
 
-  int result = summary.xlmax(numbers, N1);
+  int result = summary.sum(numbers, num_elements);
   delete numbers;
 
   std::cout << "Result:" << std::endl;
   std::cout << result << std::endl;
   return 0;
 }
+

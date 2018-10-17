@@ -21,12 +21,6 @@ void merge_results(int left_index, int middle_index, int right_index) {
 	left[left_n] = std::numeric_limits<float>::max();
 	right[right_n] = std::numeric_limits<float>::max();
 
-	XLLog log;
-	log.line("");
-	log.line("Indexes:");
-	log.array("left", left, left_n + 1);
-	log.array("right", right, right_n + 1);
-
 	int i = 0, j = 0;
 
 	for(int k = left_index - 1; k < right_index; ++k) {

@@ -10,7 +10,7 @@ int main(int argc, char** argv)
   XLSort sort;
   XLLog log;
 
-  int num_elements = pow(10, 1);
+  int num_elements = pow(10, 6);
 
   float* numbers = new float[num_elements];
 
@@ -18,15 +18,15 @@ int main(int argc, char** argv)
     numbers[num_elements - i - 1] = (float)i;
   }
 
-  log.array("numbers", numbers, num_elements);
+  // log.array("numbers", numbers, num_elements);
 
-  sort.sort(numbers, num_elements);
+  float max = summary.max(numbers, num_elements);
 
-  log.array("numbers", numbers, num_elements);
+  // log.array("numbers", numbers, num_elements);
 
   delete numbers;
 
-  std::cout << "Result:" << std::endl;
+  std::cout << "Result:" << max << std::endl;
   return 0;
 }
 

@@ -57,10 +57,10 @@ void sort_m(float * input, int len) {
 
 void XLSort::sort(float * input, int len) {	
 	XLLog log;
-	log.function_start("XLSort::sort");
+	log.function_start("XLSort::sort", XLColor::FG_DEFAULT);
 	if(len <= 1) return;
 
 	sort_m(input, len);
 
-	log.function_end("XLSort::sort");
+	log.function_end("XLSort::sort", XLColor::FG_DEFAULT);
 }

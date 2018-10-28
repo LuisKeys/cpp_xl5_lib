@@ -1,6 +1,5 @@
 #include <iostream>
 #include <limits>
-#include <omp.h>
 #include "XLSummary.h"
 #include "XLLog.h"
 
@@ -10,8 +9,6 @@ float XLSummary::max(float * input, int len) {
   
   max_result = std::numeric_limits<int>::min();
 
-  omp_set_num_threads(6);
-  #pragma omp parallel for reduction(max: max_result)
   for(int i = 0; i < len; ++i) {
     if(max_result < input[i])
       max_result = input [i]; 

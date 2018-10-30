@@ -5,7 +5,7 @@
 int main(int argc, char** argv)
 {
   XLTest test;
-  int verbose = true;  
+  int verbose = false;
 
   test.test(verbose);
 

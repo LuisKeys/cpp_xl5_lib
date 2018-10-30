@@ -7,7 +7,7 @@ float XLSummary::max(float * input, int len) {
 	XLLog log;
 	log.function_start("XLSummary::max", XLColor::FG_DEFAULT);
   
-  max_result = std::numeric_limits<int>::min();
+  float max_result = std::numeric_limits<int>::min();
 
   for(int i = 0; i < len; ++i) {
     if(max_result < input[i])
@@ -16,6 +16,21 @@ float XLSummary::max(float * input, int len) {
 
 	log.function_end("XLSummary::max", XLColor::FG_DEFAULT);
   return max_result;
+}
+
+float XLSummary::min(float * input, int len) {  
+  XLLog log;
+  log.function_start("XLSummary::max", XLColor::FG_DEFAULT);
+  
+  float min_result = std::numeric_limits<int>::max();
+
+  for(int i = 0; i < len; ++i) {
+    if(min_result > input[i])
+      min_result = input [i]; 
+  }
+
+  log.function_end("XLSummary::min", XLColor::FG_DEFAULT);
+  return min_result;
 }
 
 float XLSummary::sum(float * input, int len) {	

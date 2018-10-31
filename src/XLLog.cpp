@@ -14,6 +14,7 @@ void XLLog::line(const std::string& input, int color) {
 	if(_is_enabled == 0) return;
 	std::cout << "\033[" << color <<"m" << input  << "\033[0m" << std::endl << std::endl;
 }
+
 void XLLog::function_start(const std::string& input, int color) {	
 	if(_is_enabled == 0) return;
 	std::cout << "\033[" << color <<"m" << "Started " << input  << "\033[0m" << std::endl;

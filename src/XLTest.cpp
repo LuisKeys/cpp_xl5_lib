@@ -5,6 +5,7 @@
 #include "tests/TestXLSummary.h"
 #include "tests/TestXLStack.h"
 #include "tests/TestXLQueue.h"
+#include "tests/TestXLBinaryTree.h"
 
 void XLTest::test(int verbose) {	
 
@@ -12,10 +13,11 @@ void XLTest::test(int verbose) {
   TestXLSummary testXLSummary;
   TestXLStack testXLStack;
   TestXLQueue testXLQueue;
+  TestXLBinaryTree testXLBinaryTree;
 
   testXLSort.test(verbose);
   testXLSummary.test(verbose);
   testXLStack.test(verbose);
   testXLQueue.test(verbose);
-  
+  testXLBinaryTree.test(verbose);  
 }

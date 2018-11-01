@@ -12,6 +12,11 @@ class XLBinaryTreeNode {
 			_key = key;
 		}
 
+		XLBinaryTreeNode(float key, XLBinaryTreeNode* parent) {
+			_key = key;
+			_parent = parent;
+		}
+
 		void set_key(float key) {
 			_key = key;
 		}
@@ -24,8 +29,32 @@ class XLBinaryTreeNode {
 			_right = right;
 		}
 
-		void set_parent(XLBinaryTreeNode * parent) {
+		void set_parent(XLBinaryTreeNode* parent) {
 			_parent = parent;
+		}
+
+		void set_is_left(int8_t is_left) {
+			_is_left = is_left;
+		}
+
+		float get_key() {
+			return _key;
+		}
+
+		XLBinaryTreeNode* get_left() {
+			return _left;
+		}
+
+		XLBinaryTreeNode* get_right() {
+			return _right;
+		}
+
+		XLBinaryTreeNode* get_parent() {
+			return _parent;
+		}
+
+		int8_t get_is_left() {
+			return _is_left;
 		}
 
 	private:
@@ -33,4 +62,5 @@ class XLBinaryTreeNode {
 		XLBinaryTreeNode* _right = (XLBinaryTreeNode*)NULL;
 		XLBinaryTreeNode* _parent = (XLBinaryTreeNode*)NULL;
 		float _key = (float)NULL;
+		int8_t _is_left = -1;
 };

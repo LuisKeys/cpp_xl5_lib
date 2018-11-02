@@ -31,14 +31,14 @@ class XLBinaryTree {
 		XLBinaryTreeNode* search(float key, XLBinaryTreeNode* node) {
 			XLLog log;
 			while(1 == 1) {				
-				if(node == (XLBinaryTreeNode*) NULL)
-					return (XLBinaryTreeNode*) NULL;
+				if(node == NULL)
+					return NULL;
 
-				if(node->get_right() == (XLBinaryTreeNode*) NULL && node->get_key() < key)
-					return (XLBinaryTreeNode*) NULL;
+				if(node->get_right() == NULL && node->get_key() < key)
+					return NULL;
 
-				if(node->get_left() == (XLBinaryTreeNode*) NULL && node->get_key() > key)
-					return (XLBinaryTreeNode*) NULL;
+				if(node->get_left() == NULL && node->get_key() > key)
+					return NULL;
 
 				if(key < node->get_key())
 					node = node->get_left();
@@ -52,42 +52,70 @@ class XLBinaryTree {
 			return node;
 		}
 
+		void insert(XLBinaryTreeNode* node) {
+			XLBinaryTreeNode* y = _root;
+			XLBinaryTreeNode* x = _root;
+
+			while(x != NULL) {
+				y = x;
+
+				if(node->get_key() < x->get_key()) {
+					x = x->get_left();
+				}
+				else {
+					x = x->get_right();
+				}
+			}
+
+			node->set_parent(y);
+
+			if(y == NULL) {
+				_root = node;
+			}
+			else if(node->get_key() < y->get_key()) {
+				y->set_left(node);
+			}
+			else {
+				y->set_right(node);
+			}
+		}
+
 		void drop() {
 			_walk_all(_root, 1);
 		}
 
 	private:		
-		XLBinaryTreeNode* _root = (XLBinaryTreeNode*)NULL;
+		XLBinaryTreeNode* _root = NULL;
 
 		void _walk_all(XLBinaryTreeNode* node, int8_t clear) {
 			XLLog log;
-			if(node != (XLBinaryTreeNode*)NULL) 
+			if(node != NULL) 
 			{
-				log.value("Node key:", node->get_key(), XLColor::FG_YELLOW);
+				log.value("Node key", node->get_key(), XLColor::FG_YELLOW);
 				_walk_all(node->get_left(), clear);
 				_walk_all(node->get_right(), clear);
 
 				if(clear == 1) {
-					if(node->get_left() == (XLBinaryTreeNode*)NULL && 
-						 node->get_right() == (XLBinaryTreeNode*)NULL) {
+					if(node->get_left() == NULL && 
+						 node->get_right() == NULL) {
 						
 						XLBinaryTreeNode* parent = node->get_parent();
 						
-						if(parent != (XLBinaryTreeNode*)NULL) {
+						if(parent != NULL) {
 							if(node->get_is_left() == 1) {
-								parent->set_left((XLBinaryTreeNode*)NULL);
+								parent->set_left(NULL);
 							}
 							else {
-								parent->set_right((XLBinaryTreeNode*)NULL);
+								parent->set_right(NULL);
 							}
 						}
 						
 						if(node != _root) {
-							log.value("Node key:", node->get_key(), XLColor::FG_RED);
+							log.value("Node key", node->get_key(), XLColor::FG_RED);
 							delete node;
 						}
 
-						node = (XLBinaryTreeNode*)NULL;
+						node = 	NULL;
 					}
 				}
 			}

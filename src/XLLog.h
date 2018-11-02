@@ -31,6 +31,7 @@ class XLLog {
 		void function_start(const std::string& input, int color);
 		void function_end(const std::string& input, int color);
 		void line(const std::string& input, int color);
+        void separator(int color);
 		void value(const std::string& description, int value, int color);
 		void value(const std::string& description, float value, int color);
 };

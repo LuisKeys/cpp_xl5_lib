@@ -4,11 +4,17 @@
 
 #define _num_of_visible_elements 10
 #define _filler "..................."
+#define _long_filler "......................................"
 
 
 clock_t _begin = clock();
 int _is_enabled = 1;
 int __num_of_visible_elements = 10;
+
+void XLLog::separator(int color) {	
+	if(_is_enabled == 0) return;
+	std::cout << "\033[" << color <<"m" << _long_filler  << "\033[0m" << std::endl << std::endl;
+}
 
 void XLLog::line(const std::string& input, int color) {	
 	if(_is_enabled == 0) return;

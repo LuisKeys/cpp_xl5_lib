@@ -10,6 +10,8 @@ class TestXLBinaryTree {
 		 	XLLog log;
 		 	XLBinaryTree tree;
 
+		 	verbose = 1;
+
 		 	// Cormen page 295 sample tree
 		 	XLBinaryTreeNode* root = tree.create(12);
 		 	
@@ -25,22 +27,36 @@ class TestXLBinaryTree {
 
 		 	tree.walk_all(root);
 
-		 	log.separator(XLColor::FG_YELLOW);
+		 	if(verbose)
+		 		log.separator(XLColor::FG_YELLOW);
 
 		 	XLBinaryTreeNode* node = tree.search(18, root);
-		 	if(node != NULL)
-				log.value("Found node key", node->get_key(), XLColor::FG_BLUE);
-			else
-				log.value("Found node key", (float)NULL, XLColor::FG_RED);
+		 	if(node != NULL) {
+		 		if(verbose)
+					log.value("Found node key", node->get_key(), XLColor::FG_BLUE);
+		 	}
+			else {
+				if(verbose)
+					log.value("Found node key", (float)NULL, XLColor::FG_RED);
+			}
 
 			XLBinaryTreeNode* ins_node = new XLBinaryTreeNode(13);
-			tree.insert(ins_node);
+			tree.insert_node(ins_node);
 
-			log.separator(XLColor::FG_YELLOW);
+			if(verbose)
+				log.separator(XLColor::FG_YELLOW);
 
 		 	tree.walk_all(root);
 
-		 	log.separator(XLColor::FG_YELLOW);
+			tree.delete_node(left);
+
+			if(verbose)
+				log.separator(XLColor::FG_YELLOW);
+
+		 	tree.walk_all(root);
+
+		 	if(verbose)
+		 		log.separator(XLColor::FG_YELLOW);
 
 		 	tree.drop();
 

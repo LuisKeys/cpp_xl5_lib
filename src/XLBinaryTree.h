@@ -3,14 +3,16 @@
 #include "XLLog.h"
 #include "XLBinaryTreeNode.h"
 #define LOG_ENABLED 1
-
+// Binary tree object and all its related operations
 class XLBinaryTree {
 	public:
+		// Create a tree with a root node with the provided key
 		XLBinaryTreeNode* create(float key) {
 			_root = new XLBinaryTreeNode(key);
 			return _root;
 		}
 
+		// Add left node to a provided parent node with a given key
 		XLBinaryTreeNode* add_left(float key, XLBinaryTreeNode* parent) {
 			XLBinaryTreeNode* left = new XLBinaryTreeNode(key, parent);
 			parent->set_left(left);
@@ -18,6 +20,7 @@ class XLBinaryTree {
 			return left;
 		}
 
+		// Add right node to a provided parent node with a given key
 		XLBinaryTreeNode* add_right(float key, XLBinaryTreeNode* parent) {
 			XLBinaryTreeNode* right = new XLBinaryTreeNode(key, parent);
 			parent->set_right(right);
@@ -25,10 +28,12 @@ class XLBinaryTree {
 			return right;
 		}
 
+		// Walk through all the tree and prints its keys in recursive order
 		void walk_all(XLBinaryTreeNode* node) {
 			_walk_all(node, 0);
 		}
 
+		// Search a particular key and returns the node
 		XLBinaryTreeNode* search(float key, XLBinaryTreeNode* node) {
 			while(1 == 1) {
 				if(node == NULL)
@@ -52,6 +57,7 @@ class XLBinaryTree {
 			return node;
 		}
 
+		// Insert a given node in the tree based on its key value
 		void insert_node(XLBinaryTreeNode* node) {
 			XLBinaryTreeNode* y = NULL;
 			XLBinaryTreeNode* x = _root;
@@ -79,6 +85,7 @@ class XLBinaryTree {
 			}
 		}
 
+		// Delete a given node from the tree
 		void delete_node(XLBinaryTreeNode* node) {
 			if(node->get_left() == NULL) {
 				_transplant(node, node->get_right());
@@ -99,6 +106,7 @@ class XLBinaryTree {
 			}
 		}
 
+		// Drop the tree from memory
 		void drop() {
 			_walk_all(_root, 1);
 		}

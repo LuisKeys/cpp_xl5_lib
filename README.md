@@ -1,7 +1,7 @@
 # XL Algorithm Library
 #### Author: **Luis Paradela**
 #### Current supported OS: **Linux**
-However it is developed in standrad C++ and compiled with make hence it can be easily ported to MacOS or Windows
+However it is developed in standard C++ and compiled with make hence it can be easily ported to MacOS or Windows
 
 #### How to build?
 Open a Linux terminal:

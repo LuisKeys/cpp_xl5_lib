@@ -7,7 +7,7 @@
 class XLBinaryTree {
 	public:
 		XLBinaryTreeNode* create(float key) {
-			_root = new XLBinaryTreeNode(key);	
+			_root = new XLBinaryTreeNode(key);
 			return _root;
 		}
 
@@ -30,7 +30,7 @@ class XLBinaryTree {
 		}
 
 		XLBinaryTreeNode* search(float key, XLBinaryTreeNode* node) {
-			while(1 == 1) {				
+			while(1 == 1) {
 				if(node == NULL)
 					return NULL;
 
@@ -103,12 +103,12 @@ class XLBinaryTree {
 			_walk_all(_root, 1);
 		}
 
-	private:		
+	private:
 		XLBinaryTreeNode* _root = NULL;
 
 		void _walk_all(XLBinaryTreeNode* node, int8_t clear) {
 			XLLog log;
-			if(node != NULL) 
+			if(node != NULL)
 			{
 				if(LOG_ENABLED == 1)
 					log.value("Node key", node->get_key(), XLColor::FG_YELLOW);
@@ -117,11 +117,11 @@ class XLBinaryTree {
 				_walk_all(node->get_right(), clear);
 
 				if(clear == 1) {
-					if(node->get_left() == NULL && 
+					if(node->get_left() == NULL &&
 						 node->get_right() == NULL) {
-						
+
 						XLBinaryTreeNode* parent = node->get_parent();
-						
+
 						if(parent != NULL) {
 							if(node->get_is_left() == 1) {
 								parent->set_left(NULL);
@@ -130,7 +130,7 @@ class XLBinaryTree {
 								parent->set_right(NULL);
 							}
 						}
-						
+
 						if(node != _root) {
 							if(LOG_ENABLED == 1)
 								log.value("Node key", node->get_key(), XLColor::FG_RED);

@@ -2,6 +2,7 @@
 
 #include "XLLog.h"
 #include "XLBinaryTreeNode.h"
+#define LOG_ENABLED 1
 
 class XLBinaryTree {
 	public:
@@ -29,7 +30,6 @@ class XLBinaryTree {
 		}
 
 		XLBinaryTreeNode* search(float key, XLBinaryTreeNode* node) {
-			XLLog log;
 			while(1 == 1) {				
 				if(node == NULL)
 					return NULL;
@@ -52,13 +52,12 @@ class XLBinaryTree {
 			return node;
 		}
 
-		void insert(XLBinaryTreeNode* node) {
-			XLBinaryTreeNode* y = _root;
+		void insert_node(XLBinaryTreeNode* node) {
+			XLBinaryTreeNode* y = NULL;
 			XLBinaryTreeNode* x = _root;
 
 			while(x != NULL) {
 				y = x;
-
 				if(node->get_key() < x->get_key()) {
 					x = x->get_left();
 				}
@@ -80,6 +79,26 @@ class XLBinaryTree {
 			}
 		}
 
+		void delete_node(XLBinaryTreeNode* node) {
+			if(node->get_left() == NULL) {
+				_transplant(node, node->get_right());
+			}
+			else if(node->get_right() == NULL) {
+				_transplant(node, node->get_left());
+			}
+			else {
+				XLBinaryTreeNode* y = _tree_min(node->get_right());
+				if(y->get_parent() != node) {
+					_transplant(y, y->get_right());
+					y->set_right(node->get_right());
+					y->get_right()->set_parent(y);
+				}
+				_transplant(node, y);
+				y->set_left(node->get_left());
+				y->get_left()->set_parent(y);
+			}
+		}
+
 		void drop() {
 			_walk_all(_root, 1);
 		}
@@ -91,7 +110,9 @@ class XLBinaryTree {
 			XLLog log;
 			if(node != NULL) 
 			{
-				log.value("Node key", node->get_key(), XLColor::FG_YELLOW);
+				if(LOG_ENABLED == 1)
+					log.value("Node key", node->get_key(), XLColor::FG_YELLOW);
+
 				_walk_all(node->get_left(), clear);
 				_walk_all(node->get_right(), clear);
 
@@ -111,7 +132,8 @@ class XLBinaryTree {
 						}
 						
 						if(node != _root) {
-							log.value("Node key", node->get_key(), XLColor::FG_RED);
+							if(LOG_ENABLED == 1)
+								log.value("Node key", node->get_key(), XLColor::FG_RED);
 							delete node;
 						}
 
@@ -121,4 +143,33 @@ class XLBinaryTree {
 			}
 		}
 
+		void _transplant(XLBinaryTreeNode* node_orig, XLBinaryTreeNode* node_new) {
+			if(node_orig->get_parent() == NULL) {
+				_root = node_new;
+			}
+			else if(node_orig == node_orig->get_parent()->get_left()) {
+				node_orig->get_parent()->set_left(node_new);
+			}
+			else {
+				node_orig->get_parent()->set_right(node_new);
+			}
+
+			if(node_new != NULL) {
+				node_new->set_parent(node_orig->get_parent());
+			}
+		}
+
+		XLBinaryTreeNode* _tree_min(XLBinaryTreeNode* node) {
+			while(node->get_left() != NULL) {
+				node = node->get_left();
+			}
+			return node;
+		}
+
+		XLBinaryTreeNode* _tree_max(XLBinaryTreeNode* node) {
+			while(node->get_right() != NULL) {
+				node = node->get_right();
+			}
+			return node;
+		}
 };

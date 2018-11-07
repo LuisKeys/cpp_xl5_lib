@@ -10,16 +10,14 @@ class TestXLBinaryTree {
 		 	XLLog log;
 		 	XLBinaryTree tree;
 
-		 	verbose = 1;
-
 		 	// Cormen page 295 sample tree
 		 	XLBinaryTreeNode* root = tree.create(12);
-		 	
+
 		 	XLBinaryTreeNode* left = tree.add_left(5, root);
 		 	tree.add_left(2, left);
 		 	tree.add_right(9, left);
 
-		 	XLBinaryTreeNode* right = tree.add_right(18, root);		 	
+		 	XLBinaryTreeNode* right = tree.add_right(18, root);
 		 	XLBinaryTreeNode* right_left = tree.add_left(15, right);
 		 	tree.add_right(17, right_left);
 

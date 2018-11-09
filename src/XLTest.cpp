@@ -14,17 +14,21 @@ void XLTest::test(int verbose) {
 
   TestXLStack testXLStack;
   testXLStack.test(verbose);
+
+  TestXLGraph testXLGraph;
+  testXLGraph.test(verbose);
+
 /*
+  TestXLStack testXLStack;
   TestXLSort testXLSort;
   TestXLSummary testXLSummary;
   TestXLQueue testXLQueue;
   TestXLBinaryTree testXLBinaryTree;
-  TestXLGraph testXLGraph;
 
   testXLSort.test(verbose);
   testXLSummary.test(verbose);
   testXLQueue.test(verbose);
   testXLBinaryTree.test(verbose);
-  testXLGraph.test(verbose);
+  testXLStack.test(verbose);
   */
 }

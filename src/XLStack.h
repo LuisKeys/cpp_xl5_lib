@@ -39,8 +39,34 @@ class XLStack {
 		// pop the top most object from the stack
 		T pop() {
 			--_top;
-			if(_top < 0) return NULL;
+			if(_top < 0) return (T)NULL;
 			return _stack_elements[_top];
+		}
+
+		// pop an element from given position
+		// similar to pop, but deom any position
+		T pop(int position) {
+			if(position < 0 || _top == 0) return (T)NULL;
+
+			T element = _stack_elements[position];
+
+			for(int i = position; i < _top - 1; ++i) {
+				_stack_elements[i] = _stack_elements[i + 1];
+			}
+
+			--_top;
+			if(_top < 0) return (T)NULL;
+			return element;
+		}
+
+		// set element at the given position
+		void set(int position, T value) {
+			_stack_elements[position] = value;
+		}
+		// return element at the given position
+
+		T get(int position) {
+			return _stack_elements[position];
 		}
 
 		// clear the stack
@@ -53,6 +79,17 @@ class XLStack {
 		// drop the stack from memory
 		void drop() {
 			free(_stack_elements);
+		}
+
+		// Print stack content for debug purposes
+		// Thie method only prints int or float values
+		void print() {
+			XLLog log;
+			for(int i = 0; i < _top; ++i) {
+				log.value_line("Position", i, XLColor::FG_YELLOW);
+				log.text_line(" - ", XLColor::FG_GREEN);
+				log.value("Value", _stack_elements[i], XLColor::FG_YELLOW);
+		 	}
 		}
 
 	private:

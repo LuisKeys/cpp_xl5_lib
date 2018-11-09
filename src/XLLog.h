@@ -26,6 +26,7 @@ namespace XLColor {
     BG_DEFAULT = 49
   };
 }
+
 // Log object
 class XLLog {
 	public:
@@ -39,7 +40,10 @@ class XLLog {
 		void function_start(const std::string& input, int color);
 
     // Write a line of text to the console
-		void line(const std::string& input, int color);
+		void text(const std::string& input, int color);
+
+    // Write a line of text to the console without new line
+		void text_line(const std::string& input, int color);
 
     // Write a separator line with dots to the console
     void separator(int color);
@@ -49,4 +53,10 @@ class XLLog {
 
     // Write a float value to the console
 		void value(const std::string& description, float value, int color);
+
+    // Write a int value to the console without new line
+		void value_line(const std::string& description, int value, int color);
+
+    // Write a float value to the console without new line
+		void value_line(const std::string& description, float value, int color);
 };

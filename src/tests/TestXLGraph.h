@@ -11,6 +11,6 @@ class TestXLGraph {
       XLGraph graph;
 
       // Create a sample graph
-      graph.create();
+      graph.create(1000);
     }
 };

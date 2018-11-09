@@ -23,11 +23,22 @@ class TestXLStack {
 		 	for(int i = 0; i < len; ++i) {
 			 	int status = stack.push(numbers[i]);
 				if(status == XL_STACK_ERR_STACK_OVERFLOW)
-					log.line("Stack overflow", XLColor::FG_RED);
-					
-				log.value("Push value", numbers[i], XLColor::FG_YELLOW);
-				log.value("Size", stack.size(), XLColor::FG_YELLOW);
+					log.text("Stack overflow", XLColor::FG_RED);
 		 	}
+
+			stack.print();
+
+			log.value("Get from position 1", stack.get(1), XLColor::FG_GREEN);
+
+			stack.print();
+			stack.set(1, 100);
+			log.value("Set at position 1", stack.get(1), XLColor::FG_GREEN);
+
+			stack.print();
+
+			log.value("Pop from position 1", stack.pop(1), XLColor::FG_GREEN);
+
+			stack.print();
 
 		 	for(int i = 0; i < len; ++i) {
 				popped_numbers[i] = stack.pop();

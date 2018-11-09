@@ -12,17 +12,19 @@
 // verbose > 1 to turn on verbose mode
 void XLTest::test(int verbose) {
 
+  TestXLStack testXLStack;
+  testXLStack.test(verbose);
+/*
   TestXLSort testXLSort;
   TestXLSummary testXLSummary;
-  TestXLStack testXLStack;
   TestXLQueue testXLQueue;
   TestXLBinaryTree testXLBinaryTree;
   TestXLGraph testXLGraph;
 
   testXLSort.test(verbose);
   testXLSummary.test(verbose);
-  testXLStack.test(verbose);
   testXLQueue.test(verbose);
   testXLBinaryTree.test(verbose);
   testXLGraph.test(verbose);
+  */
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "XLLog.h"
+
 #define XL_STACK_OK 0
 #define XL_STACK_ERR_STACK_OVERFLOW 1
 
@@ -15,17 +17,17 @@ class XLStack {
 		// create a stack object
 		void create(int max_size) {
 			_stack_elements = (T*)malloc(sizeof(T));
-			++_top;
 			_max_size = max_size;
 		}
 
 		// push the provided object to the stack
 		int push(T data_object) {
 			T* test = (T*)realloc(_stack_elements, (_top + 1) * sizeof(T));
+			_stack_elements[_top] = data_object;
 
-			// if(!test){
-			// 	throw std::bad_alloc();
-			// }
+			if(!test){
+				throw std::bad_alloc();
+			}
 
 			// _stack_elements[_top] = data_object;
 			++_top;
@@ -45,7 +47,7 @@ class XLStack {
 		void clear() {
 			 free(_stack_elements);
 			_stack_elements = (T*)malloc(sizeof(T));
-			_top = 1;
+			_top = 0;
 		}
 
 		// drop the stack from memory

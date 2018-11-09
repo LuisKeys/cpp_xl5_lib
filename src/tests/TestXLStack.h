@@ -8,10 +8,11 @@ class TestXLStack {
 	public:
 		void test(int verbose) {
 		 	XLLog log;
-		 	XLStack<float*> stack;
-		 	float* popped_numbers;
+		 	XLStack<float> stack;
+			int len = 4;
+		 	float* popped_numbers = new float(len);
+		 	float* numbers = new float(len);
 
-		 	float* numbers = new float(4);
 		 	numbers[0] = 10;
 		 	numbers[1] = 20;
 		 	numbers[2] = 36;
@@ -19,16 +20,20 @@ class TestXLStack {
 
 		 	stack.create(1000);
 
-		 	for(int i = 0; i < 4; ++i) {
-			 	stack.push(numbers);
+		 	for(int i = 0; i < len; ++i) {
+			 	int status = stack.push(numbers[i]);
+				if(status == XL_STACK_ERR_STACK_OVERFLOW)
+					log.line("Stack overflow", XLColor::FG_RED);
+					
+				log.value("Push value", numbers[i], XLColor::FG_YELLOW);
 				log.value("Size", stack.size(), XLColor::FG_YELLOW);
 		 	}
 
-		 	for(int i = 0; i < 1; ++i) {
-			 	// popped_numbers = stack.pop();
+		 	for(int i = 0; i < len; ++i) {
+				popped_numbers[i] = stack.pop();
 		 	}
 
-			// log.array("popped numbers", popped_numbers, 1, XLColor::FG_YELLOW);
+			log.array("popped numbers", popped_numbers, len, XLColor::FG_YELLOW);
 		 	/*
 		 	for(int i = 0; i < 11; ++i) {
 			 	int status = stack.push(numbers);

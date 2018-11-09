@@ -61,11 +61,32 @@ class XLStack {
 
 		// set element at the given position
 		void set(int position, T value) {
+			if(position < 0 || _top == 0) return;
 			_stack_elements[position] = value;
 		}
-		// return element at the given position
 
+		// insert a value in a given position
+		void insert(int position, T value) {
+			if(position < 0 || _top == 0) return;
+
+			T* test = (T*)realloc(_stack_elements, (_top + 1) * sizeof(T));
+
+			if(!test){
+				throw std::bad_alloc();
+			}
+
+			++_top;
+
+			for(int i = _top - 1; i >= 0; --i) {
+				_stack_elements[i + 1] = _stack_elements[i];
+			}
+
+			_stack_elements[position] = value;
+		}
+
+		// return element at the given position
 		T get(int position) {
+			if(position < 0 || _top == 0) return (T)NULL;
 			return _stack_elements[position];
 		}
 

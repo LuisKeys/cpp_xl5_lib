@@ -26,25 +26,38 @@ class TestXLStack {
 					log.text("Stack overflow", XLColor::FG_RED);
 		 	}
 
-			stack.print();
+			if(verbose) {
+				stack.print();
 
-			log.value("Get from position 1", stack.get(1), XLColor::FG_GREEN);
+				log.separator(XLColor::FG_GREEN);
 
-			stack.print();
-			stack.set(1, 100);
-			log.value("Set at position 1", stack.get(1), XLColor::FG_GREEN);
+				log.value("Get from position 1", stack.get(1), XLColor::FG_GREEN);
+				stack.print();
 
-			stack.print();
+				log.separator(XLColor::FG_GREEN);
 
-			log.value("Pop from position 1", stack.pop(1), XLColor::FG_GREEN);
+				stack.set(1, 100);
+				stack.print();
 
-			stack.print();
+				log.separator(XLColor::FG_GREEN);
+
+				stack.insert(1, 80);
+				stack.print();
+
+				log.separator(XLColor::FG_GREEN);
+
+				log.value("Pop from position 1", stack.pop(1), XLColor::FG_GREEN);
+				stack.print();
+
+				log.separator(XLColor::FG_GREEN);
+			}
 
 		 	for(int i = 0; i < len; ++i) {
 				popped_numbers[i] = stack.pop();
 		 	}
 
-			log.array("popped numbers", popped_numbers, len, XLColor::FG_YELLOW);
+			if(verbose)
+				log.array("popped numbers", popped_numbers, len, XLColor::FG_YELLOW);
 		 	/*
 		 	for(int i = 0; i < 11; ++i) {
 			 	int status = stack.push(numbers);

@@ -8,11 +8,16 @@ class TestXL5Matrix {
 	public:
 		void test(int verbose) {
 		 	XL5Log log;
-			XL5Matrix<float> A;
-			int rows = 4;
+			XL5Matrix<int> A;
+			int rows = 2;
 			int cols = 2;
 
 			A.create(rows, cols);
+
+			A.init_unit();
+
+			if(verbose)
+				A.log("Matrix A > init to unit", XL5Color::FG_YELLOW);
 
 			A.init_constant(2);
 
@@ -26,15 +31,22 @@ class TestXL5Matrix {
 				if(verbose)
 					A.log("Matrix A > modified", XL5Color::FG_YELLOW);
 
+				A.drop();
+
+				rows = 6;
+				cols = 5;
+
+				A.create(rows, cols);
+
+				A.init_random(1, 10);
+
+				if(verbose)
+					A.log("Matrix A > init to random from 1 to 10", XL5Color::FG_YELLOW);
+
 				A.traspose();
 
 				if(verbose)
 					A.log("Matrix A > transposed", XL5Color::FG_YELLOW);
-
-				A.init_unit();
-
-				if(verbose)
-					A.log("Matrix A > init to unit", XL5Color::FG_YELLOW);
 
 				A.drop();
 

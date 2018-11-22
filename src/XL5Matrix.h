@@ -42,6 +42,18 @@ class XL5Matrix {
 			}
 		}
 
+		// initialize a random matrix
+		void init_random(T min, T max) {
+			srand((unsigned)time(0));
+
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {\
+						T i = (T)((T)rand() % (T)max) + (T)min;
+						_matrix_elements[get_index(row, col)] = i;
+				}
+			}
+		}
+
 		// traspose matrix
 		void traspose() {
 			int t_cols_count = _rows_count;
@@ -50,7 +62,7 @@ class XL5Matrix {
 			T* t_matrix_elements = (T*)malloc(sizeof(T) * _rows_count * _cols_count);
 			for(int row = 0; row < _rows_count; ++row) {
 				for(int col = 0; col < _cols_count; ++col) {
-						t_matrix_elements[get_index(row, col)] = _matrix_elements[get_index(col, row)];
+						t_matrix_elements[get_index_no_check(col, row, t_cols_count)] = _matrix_elements[get_index(row, col)];
 				}
 			}
 
@@ -101,11 +113,17 @@ class XL5Matrix {
 		int _rows_count = 0;
 		int _cols_count = 0;
 
+		int get_index_no_check(int row, int col, int cols_count) {
+			int index = row * cols_count + col;
+
+			return index;
+		}
+
 		int get_index(int row, int col) {
 			int index = row * _cols_count + col;
 
 			if (index < 0 || index > _rows_count * _cols_count) {
-				exc_index_out_of_range();
+				exc_index_out_of_range(row, col);
 			}
 
 			return index;

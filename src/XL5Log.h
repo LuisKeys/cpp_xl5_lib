@@ -33,6 +33,9 @@ class XL5Log {
     // Write an array with a partial of its first and last elements to the console
 		void array(const std::string& description, float * value, int len, int color);
 
+    // Write an exception description
+		void exception_msg(const std::string& input);
+
     // Write when a function ends and displays elapsed execution time to the console
 		void function_end(const std::string& input, int color);
 
@@ -59,4 +62,7 @@ class XL5Log {
 
     // Write a float value to the console without new line
 		void value_line(const std::string& description, float value, int color);
+
+    // Write a matrix with a partial of its first and last elements to the console
+		void matrix(const std::string& description, float * matrix, int rows, int cols, int color);
 };

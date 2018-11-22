@@ -13,9 +13,6 @@
 // verbose > 1 to turn on verbose mode
 void XL5Test::test(int verbose) {
 
-  TestXL5Stack testXL5Stack;
-  testXL5Stack.test(verbose);
-
   TestXL5Matrix testXL5Matrix;
   testXL5Matrix.test(verbose);
 

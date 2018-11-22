@@ -34,6 +34,11 @@ void XL5Log::array(const std::string& description, float * value, int len, int c
 	}
 }
 
+// Write an exception description
+void XL5Log::exception_msg(const std::string& input) {
+	std::cout << "\033[" << XL5Color::FG_RED <<"m" << "* " << input  << " *" << "\033[0m" << std::endl;
+}
+
 // Write when a function ends and displays elapsed execution time to the console
 void XL5Log::function_end(const std::string& input, int color) {
 	if(_is_enabled == 0) return;

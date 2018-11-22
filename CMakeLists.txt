@@ -1,4 +1,4 @@
-project(cpp_xl_lib)
+project(cpp_xl5_lib)
 
 cmake_minimum_required (VERSION 3.5)
 
@@ -25,6 +25,6 @@ link_directories(/usr/local/lib)
 
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
-add_executable(cpp_xl_lib ${sources})
+add_executable(cpp_xl5_lib ${sources})
 
-target_link_libraries(cpp_xl_lib)
+target_link_libraries(cpp_xl5_lib)

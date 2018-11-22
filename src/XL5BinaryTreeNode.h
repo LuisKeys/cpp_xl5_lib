@@ -1,22 +1,22 @@
 #pragma once
 
 #include <iostream>
-#include "XLLog.h"
+#include "XL5Log.h"
 
 // Binary tree node object and all its related operations
-class XLBinaryTreeNode {
+class XL5BinaryTreeNode {
 	public:
 		// Default constructor
-		XLBinaryTreeNode() {
+		XL5BinaryTreeNode() {
 		}
 
 		// Constructor with key parameter
-		XLBinaryTreeNode(float key) {
+		XL5BinaryTreeNode(float key) {
 			_key = key;
 		}
 
 		// Constructor with key and parent parameters
-		XLBinaryTreeNode(float key, XLBinaryTreeNode* parent) {
+		XL5BinaryTreeNode(float key, XL5BinaryTreeNode* parent) {
 			_key = key;
 			_parent = parent;
 		}
@@ -27,17 +27,17 @@ class XLBinaryTreeNode {
 		}
 
 		// Set the node left child
-		void set_left(XLBinaryTreeNode * left) {
+		void set_left(XL5BinaryTreeNode * left) {
 			_left = left;
 		}
 
 		// Set the node right child
-		void set_right(XLBinaryTreeNode * right) {
+		void set_right(XL5BinaryTreeNode * right) {
 			_right = right;
 		}
 
 		// Set the node parent
-		void set_parent(XLBinaryTreeNode* parent) {
+		void set_parent(XL5BinaryTreeNode* parent) {
 			_parent = parent;
 		}
 
@@ -52,17 +52,17 @@ class XLBinaryTreeNode {
 		}
 
 		// Get left child
-		XLBinaryTreeNode* get_left() {
+		XL5BinaryTreeNode* get_left() {
 			return _left;
 		}
 
 		// Get right child
-		XLBinaryTreeNode* get_right() {
+		XL5BinaryTreeNode* get_right() {
 			return _right;
 		}
 
 		// Get parent
-		XLBinaryTreeNode* get_parent() {
+		XL5BinaryTreeNode* get_parent() {
 			return _parent;
 		}
 
@@ -72,9 +72,9 @@ class XLBinaryTreeNode {
 		}
 
 	private:
-		XLBinaryTreeNode* _left = (XLBinaryTreeNode*)NULL;
-		XLBinaryTreeNode* _right = (XLBinaryTreeNode*)NULL;
-		XLBinaryTreeNode* _parent = (XLBinaryTreeNode*)NULL;
+		XL5BinaryTreeNode* _left = (XL5BinaryTreeNode*)NULL;
+		XL5BinaryTreeNode* _right = (XL5BinaryTreeNode*)NULL;
+		XL5BinaryTreeNode* _parent = (XL5BinaryTreeNode*)NULL;
 		float _key = (float)NULL;
 		int8_t _is_left = -1;
 };

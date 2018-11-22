@@ -1,10 +1,10 @@
 #include <iostream>
 #include <cmath>
-#include "src/XLTest.h"
+#include "src/XL5Test.h"
 
 int main(int argc, char** argv)
 {
-  XLTest test;
+  XL5Test test;
   int verbose = true;
 
   // Executes unit tests

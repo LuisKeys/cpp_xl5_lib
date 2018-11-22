@@ -1,7 +1,9 @@
-# XL Algorithm Library
+# Fireball XL5 Algorithm Library
 #### Author: **Luis Paradela**
 #### Current supported OS: **Linux**
 However it is developed in standard C++ and compiled with make hence it can be easily ported to MacOS or Windows
+
+Library name is a tribute to Gerry Anderson Fireball XL5 TV show
 
 #### How to build?
 Open a Linux terminal:

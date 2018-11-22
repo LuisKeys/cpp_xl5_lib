@@ -1,14 +1,14 @@
 #pragma once
 
 #include <iostream>
-#include "../XLLog.h"
-#include "../XLGraph.h"
+#include "../XL5Log.h"
+#include "../XL5Graph.h"
 
-class TestXLGraph {
+class TestXL5Graph {
   public:
     void test(int verbose) {
-      XLLog log;
-      XLGraph graph;
+      XL5Log log;
+      XL5Graph graph;
 
       // Create a sample graph
       graph.create(1000);

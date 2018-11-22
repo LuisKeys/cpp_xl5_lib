@@ -1,13 +1,13 @@
 #pragma once
 
-#include "XLLog.h"
+#include "XL5Log.h"
 
-#define XL_STACK_OK 0
-#define XL_STACK_ERR_STACK_OVERFLOW 1
+#define XL5_STACK_OK 0
+#define XL5_STACK_ERR_STACK_OVERFLOW 1
 
 // stack object and related operations which can handle any type of object
 template<class T>
-class XLStack {
+class XL5Stack {
 	public:
 		// returns the size of the stack
 		int size() {
@@ -31,9 +31,9 @@ class XLStack {
 
 			// _stack_elements[_top] = data_object;
 			++_top;
-			if(_top == _max_size) return XL_STACK_ERR_STACK_OVERFLOW;
+			if(_top == _max_size) return XL5_STACK_ERR_STACK_OVERFLOW;
 
-			return XL_STACK_OK;
+			return XL5_STACK_OK;
 		}
 
 		// pop the top most object from the stack
@@ -105,11 +105,11 @@ class XLStack {
 		// Print stack content for debug purposes
 		// Thie method only prints int or float values
 		void print() {
-			XLLog log;
+			XL5Log log;
 			for(int i = 0; i < _top; ++i) {
-				log.value_line("Position", i, XLColor::FG_YELLOW);
-				log.text_line(" - ", XLColor::FG_GREEN);
-				log.value("Value", _stack_elements[i], XLColor::FG_YELLOW);
+				log.value_line("Position", i, XL5Color::FG_YELLOW);
+				log.text_line(" - ", XL5Color::FG_GREEN);
+				log.value("Value", _stack_elements[i], XL5Color::FG_YELLOW);
 		 	}
 		}
 

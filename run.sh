@@ -1,6 +1,5 @@
 cd build
-rm cpp_xl_lib
-	make 
-./cpp_xl_lib
+rm cpp_xl5_lib
+	make
+./cpp_xl5_lib
 cd ..
-	

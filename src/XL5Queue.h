@@ -1,13 +1,13 @@
 #pragma once
 
-#include "XLLog.h"
+#include "XL5Log.h"
 
-#define XL_QUEUE_OK 0
-#define XL_QUEUE_ERR_QUEUE_OVERFLOW 1
+#define XL5_QUEUE_OK 0
+#define XL5_QUEUE_ERR_QUEUE_OVERFLOW 1
 
 // Queue object and related operations, any type can be enqueue and dequeue
 template<class T>
-class XLQueue {
+class XL5Queue {
 	public:
 		// Returns queue size
 		int size() {
@@ -26,10 +26,10 @@ class XLQueue {
 		int enqueue(T data_object) {
 			if(_tail < _head)
 				if(_tail == _head - 1)
-					return XL_QUEUE_ERR_QUEUE_OVERFLOW;
+					return XL5_QUEUE_ERR_QUEUE_OVERFLOW;
 
 			if(_tail == _size)
-				return XL_QUEUE_ERR_QUEUE_OVERFLOW;
+				return XL5_QUEUE_ERR_QUEUE_OVERFLOW;
 
 			_queue_elements[_tail] = data_object;
 			if(_tail == _size) {
@@ -39,7 +39,7 @@ class XLQueue {
 				_tail++;
 			}
 
-			return XL_QUEUE_OK;
+			return XL5_QUEUE_OK;
 		}
 
 		// Dequeue an object ot type T from the queue

@@ -2,9 +2,6 @@
 #include <ctime>
 #include "XL5Log.h"
 
-#define _num_of_visible_elements 10
-#define _filler "..................."
-#define _long_filler "......................................"
 
 
 clock_t _begin = clock();

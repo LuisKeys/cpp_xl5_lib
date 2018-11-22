@@ -13,6 +13,8 @@ class TestXL5Matrix {
 			int rows = 2;
 			int cols = 2;
 
+			clear_console();
+
 			A.create(rows, cols);
 			B.create(rows, cols);
 

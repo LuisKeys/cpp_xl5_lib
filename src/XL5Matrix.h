@@ -114,6 +114,7 @@ class XL5Matrix {
 							T b = B->get(a_col, c_col);
 							sum += a * b;
 						}
+						
 						C->set(c_row, c_col, sum);
 				}
 			}

@@ -9,10 +9,12 @@ class TestXL5Matrix {
 		void test(int verbose) {
 		 	XL5Log log;
 			XL5Matrix<int> A;
+			XL5Matrix<int> B;
 			int rows = 2;
 			int cols = 2;
 
 			A.create(rows, cols);
+			B.create(rows, cols);
 
 			A.init_unit();
 
@@ -33,8 +35,8 @@ class TestXL5Matrix {
 
 				A.drop();
 
-				rows = 6;
-				cols = 5;
+				rows = 2;
+				cols = 4;
 
 				A.create(rows, cols);
 
@@ -48,7 +50,19 @@ class TestXL5Matrix {
 				if(verbose)
 					A.log("Matrix A > transposed", XL5Color::FG_YELLOW);
 
+				B.init_random(1, 10);
+
+				if(verbose)
+					B.log("Matrix B", XL5Color::FG_YELLOW);
+
+				XL5Matrix<int>* C = A.multiply(&B);
+
+				if(verbose)
+					C->log("Matrix C", XL5Color::FG_YELLOW);
+
 				A.drop();
+				B.drop();
+				C->drop();
 
 			log.function_end("Test matrix (XL5Matrix) Passed Ok", XL5Color::BG_GREEN);
 		}

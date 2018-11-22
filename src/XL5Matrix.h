@@ -54,6 +54,26 @@ class XL5Matrix {
 			}
 		}
 
+		// matrix vert size
+		int rows_count() {
+			return _rows_count;
+		}
+
+		// matrix horiz size
+		int cols_count() {
+			return _cols_count;
+		}
+
+		// get a matrix element
+		T get(int row, int col) {
+			return _matrix_elements[get_index(row, col)];
+		}
+
+		// set a matrix element
+		T set(int row, int col, T value) {
+			_matrix_elements[get_index(row, col)] = value;
+		}
+
 		// traspose matrix
 		void traspose() {
 			int t_cols_count = _rows_count;
@@ -74,14 +94,31 @@ class XL5Matrix {
 			_rows_count = t_rows_count;
 		}
 
-		// get a matrix element
-		T get(int row, int col) {
-			return _matrix_elements[get_index(row, col)];
-		}
+		// multiply 2 matrices AxB = C (Current is A and provided is B, and return a pointer to C)
+		XL5Matrix<T> * multiply(XL5Matrix<T>* B) {
+			if(_cols_count != B->rows_count()) {
+				exc_cannot_multiply_matrices(_cols_count, B->cols_count());
+			}
+			int c_rows_count = _rows_count;
+			int c_cols_count = B->cols_count();
 
-		// set a matrix element
-		T set(int row, int col, T value) {
-			_matrix_elements[get_index(row, col)] = value;
+			XL5Matrix<T>* C = new XL5Matrix<T>();
+
+			C->create(c_rows_count, c_cols_count);
+
+			for(int c_row = 0; c_row < c_rows_count; ++c_row) {
+				for(int c_col = 0; c_col < c_cols_count; ++c_col) {
+						T sum = 0;
+						for( int a_col = 0; a_col < _cols_count; ++a_col) {
+							T a = _matrix_elements[get_index(c_row, a_col)];
+							T b = B->get(a_col, c_col);
+							sum += a * b;
+						}
+						C->set(c_row, c_col, sum);
+				}
+			}
+
+			return C;
 		}
 
 		// drop the matrix from memory
@@ -95,6 +132,9 @@ class XL5Matrix {
 		void log(const std::string& description, int color) {
 
 			std::cout << "\033[" << color << "m" << description << "\033[0m" << std::endl;
+
+			std::cout << "\033[" << color << "m" << "Rows:" << _rows_count << "\033[0m" << std::endl;
+			std::cout << "\033[" << color << "m" << "Cols:" << _cols_count << "\033[0m" << std::endl;
 
 			for(int row = 0; row < _rows_count; ++row) {
 				for(int col = 0; col < _cols_count; ++col) {

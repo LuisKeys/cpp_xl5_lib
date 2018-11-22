@@ -5,6 +5,10 @@
 
 float * _input;
 
+// Merge results
+// left_index > left partition index
+// middle_index > middle partition index
+// right_index > right partition index
 void merge_results(int left_index, int middle_index, int right_index) {
 	int left_n = middle_index - left_index + 1;
 	int right_n = right_index - middle_index;
@@ -37,9 +41,12 @@ void merge_results(int left_index, int middle_index, int right_index) {
 	delete right;
 }
 
+// Merge sort recursive function
+// left_index > left partition index
+// right_index > right partition index
 void merge_sort(int left_index, int right_index) {
 	if(left_index < right_index) {
-		float float_middle = (float)(left_index + right_index) / 2.0;		
+		float float_middle = (float)(left_index + right_index) / 2.0;
 		int middle_index = (int)float_middle;
 
 		merge_sort(left_index, middle_index);
@@ -48,6 +55,9 @@ void merge_sort(int left_index, int right_index) {
 	}
 }
 
+// Merge sort private function which calls merge_sort recursive function
+// input > float array
+// len > float array length
 void sort_m(float * input, int len) {
 	_input = input;
 	int left_index = 1;
@@ -55,7 +65,10 @@ void sort_m(float * input, int len) {
 	merge_sort(left_index, right_index);
 }
 
-void XLSort::sort(float * input, int len) {	
+// Merge sort a float array
+// input > float array
+// len > float array length
+void XLSort::sort(float * input, int len) {
 	XLLog log;
 	log.function_start("XLSort::sort", XLColor::FG_DEFAULT);
 	if(len <= 1) return;

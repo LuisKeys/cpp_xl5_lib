@@ -6,18 +6,29 @@
 #include "tests/TestXLStack.h"
 #include "tests/TestXLQueue.h"
 #include "tests/TestXLBinaryTree.h"
+#include "tests/TestXLGraph.h"
 
-void XLTest::test(int verbose) {	
+// Description: Main unit tests entry point class
+// verbose > 1 to turn on verbose mode
+void XLTest::test(int verbose) {
 
+  TestXLStack testXLStack;
+  testXLStack.test(verbose);
+
+  TestXLGraph testXLGraph;
+  testXLGraph.test(verbose);
+
+/*
+  TestXLStack testXLStack;
   TestXLSort testXLSort;
   TestXLSummary testXLSummary;
-  TestXLStack testXLStack;
   TestXLQueue testXLQueue;
   TestXLBinaryTree testXLBinaryTree;
 
   testXLSort.test(verbose);
   testXLSummary.test(verbose);
-  testXLStack.test(verbose);
   testXLQueue.test(verbose);
-  testXLBinaryTree.test(verbose);  
+  testXLBinaryTree.test(verbose);
+  testXLStack.test(verbose);
+  */
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 // Description: Aggregation algorigthms
-class XLSummary {
+class XL5Summary {
 	public:
 
 		// Calculates the max value in input array

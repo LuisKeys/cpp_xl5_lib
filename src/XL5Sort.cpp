@@ -1,7 +1,7 @@
 #include <iostream>
 #include <limits>
-#include "XLSort.h"
-#include "XLLog.h"
+#include "XL5Sort.h"
+#include "XL5Log.h"
 
 float * _input;
 
@@ -68,12 +68,12 @@ void sort_m(float * input, int len) {
 // Merge sort a float array
 // input > float array
 // len > float array length
-void XLSort::sort(float * input, int len) {
-	XLLog log;
-	log.function_start("XLSort::sort", XLColor::FG_DEFAULT);
+void XL5Sort::sort(float * input, int len) {
+	XL5Log log;
+	log.function_start("XL5Sort::sort", XL5Color::FG_DEFAULT);
 	if(len <= 1) return;
 
 	sort_m(input, len);
 
-	log.function_end("XLSort::sort", XLColor::FG_DEFAULT);
+	log.function_end("XL5Sort::sort", XL5Color::FG_DEFAULT);
 }

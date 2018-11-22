@@ -1,7 +1,7 @@
 #pragma once
 
 // Colors definitions to log in the console using different fg and bg colors
-namespace XLColor {
+namespace XL5Color {
   enum Code {
     FG_DEFAULT = 39,
     FG_BLACK = 30,
@@ -28,7 +28,7 @@ namespace XLColor {
 }
 
 // Log object
-class XLLog {
+class XL5Log {
 	public:
     // Write an array with a partial of its first and last elements to the console
 		void array(const std::string& description, float * value, int len, int color);

@@ -1,40 +1,40 @@
 #pragma once
 
-#include "XLLog.h"
-#include "XLBinaryTreeNode.h"
+#include "XL5Log.h"
+#include "XL5BinaryTreeNode.h"
 #define LOG_ENABLED 1
 // Binary tree object and all its related operations
-class XLBinaryTree {
+class XL5BinaryTree {
 	public:
 		// Create a tree with a root node with the provided key
-		XLBinaryTreeNode* create(float key) {
-			_root = new XLBinaryTreeNode(key);
+		XL5BinaryTreeNode* create(float key) {
+			_root = new XL5BinaryTreeNode(key);
 			return _root;
 		}
 
 		// Add left node to a provided parent node with a given key
-		XLBinaryTreeNode* add_left(float key, XLBinaryTreeNode* parent) {
-			XLBinaryTreeNode* left = new XLBinaryTreeNode(key, parent);
+		XL5BinaryTreeNode* add_left(float key, XL5BinaryTreeNode* parent) {
+			XL5BinaryTreeNode* left = new XL5BinaryTreeNode(key, parent);
 			parent->set_left(left);
 			left->set_is_left(1);
 			return left;
 		}
 
 		// Add right node to a provided parent node with a given key
-		XLBinaryTreeNode* add_right(float key, XLBinaryTreeNode* parent) {
-			XLBinaryTreeNode* right = new XLBinaryTreeNode(key, parent);
+		XL5BinaryTreeNode* add_right(float key, XL5BinaryTreeNode* parent) {
+			XL5BinaryTreeNode* right = new XL5BinaryTreeNode(key, parent);
 			parent->set_right(right);
 			right->set_is_left(0	);
 			return right;
 		}
 
 		// Walk through all the tree and prints its keys in recursive order
-		void walk_all(XLBinaryTreeNode* node) {
+		void walk_all(XL5BinaryTreeNode* node) {
 			_walk_all(node, 0);
 		}
 
 		// Search a particular key and returns the node
-		XLBinaryTreeNode* search(float key, XLBinaryTreeNode* node) {
+		XL5BinaryTreeNode* search(float key, XL5BinaryTreeNode* node) {
 			while(1 == 1) {
 				if(node == NULL)
 					return NULL;
@@ -58,9 +58,9 @@ class XLBinaryTree {
 		}
 
 		// Insert a given node in the tree based on its key value
-		void insert_node(XLBinaryTreeNode* node) {
-			XLBinaryTreeNode* y = NULL;
-			XLBinaryTreeNode* x = _root;
+		void insert_node(XL5BinaryTreeNode* node) {
+			XL5BinaryTreeNode* y = NULL;
+			XL5BinaryTreeNode* x = _root;
 
 			while(x != NULL) {
 				y = x;
@@ -86,7 +86,7 @@ class XLBinaryTree {
 		}
 
 		// Delete a given node from the tree
-		void delete_node(XLBinaryTreeNode* node) {
+		void delete_node(XL5BinaryTreeNode* node) {
 			if(node->get_left() == NULL) {
 				_transplant(node, node->get_right());
 			}
@@ -94,7 +94,7 @@ class XLBinaryTree {
 				_transplant(node, node->get_left());
 			}
 			else {
-				XLBinaryTreeNode* y = _tree_min(node->get_right());
+				XL5BinaryTreeNode* y = _tree_min(node->get_right());
 				if(y->get_parent() != node) {
 					_transplant(y, y->get_right());
 					y->set_right(node->get_right());
@@ -112,14 +112,14 @@ class XLBinaryTree {
 		}
 
 	private:
-		XLBinaryTreeNode* _root = NULL;
+		XL5BinaryTreeNode* _root = NULL;
 
-		void _walk_all(XLBinaryTreeNode* node, int8_t clear) {
-			XLLog log;
+		void _walk_all(XL5BinaryTreeNode* node, int8_t clear) {
+			XL5Log log;
 			if(node != NULL)
 			{
 				if(LOG_ENABLED == 1)
-					log.value("Node key", node->get_key(), XLColor::FG_YELLOW);
+					log.value("Node key", node->get_key(), XL5Color::FG_YELLOW);
 
 				_walk_all(node->get_left(), clear);
 				_walk_all(node->get_right(), clear);
@@ -128,7 +128,7 @@ class XLBinaryTree {
 					if(node->get_left() == NULL &&
 						 node->get_right() == NULL) {
 
-						XLBinaryTreeNode* parent = node->get_parent();
+						XL5BinaryTreeNode* parent = node->get_parent();
 
 						if(parent != NULL) {
 							if(node->get_is_left() == 1) {
@@ -141,7 +141,7 @@ class XLBinaryTree {
 
 						if(node != _root) {
 							if(LOG_ENABLED == 1)
-								log.value("Node key", node->get_key(), XLColor::FG_RED);
+								log.value("Node key", node->get_key(), XL5Color::FG_RED);
 							delete node;
 						}
 
@@ -151,7 +151,7 @@ class XLBinaryTree {
 			}
 		}
 
-		void _transplant(XLBinaryTreeNode* node_orig, XLBinaryTreeNode* node_new) {
+		void _transplant(XL5BinaryTreeNode* node_orig, XL5BinaryTreeNode* node_new) {
 			if(node_orig->get_parent() == NULL) {
 				_root = node_new;
 			}
@@ -167,14 +167,14 @@ class XLBinaryTree {
 			}
 		}
 
-		XLBinaryTreeNode* _tree_min(XLBinaryTreeNode* node) {
+		XL5BinaryTreeNode* _tree_min(XL5BinaryTreeNode* node) {
 			while(node->get_left() != NULL) {
 				node = node->get_left();
 			}
 			return node;
 		}
 
-		XLBinaryTreeNode* _tree_max(XLBinaryTreeNode* node) {
+		XL5BinaryTreeNode* _tree_max(XL5BinaryTreeNode* node) {
 			while(node->get_right() != NULL) {
 				node = node->get_right();
 			}

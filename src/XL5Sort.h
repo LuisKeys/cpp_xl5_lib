@@ -1,7 +1,7 @@
 #pragma once
 
 // Sorting algorithms
-class XLSort {
+class XL5Sort {
 	public:
 		// Sort a float array
 		// input > float array

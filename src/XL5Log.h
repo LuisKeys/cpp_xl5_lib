@@ -4,7 +4,7 @@
 
 
 //Clean console
-#define clear_console() printf("\033[H\033[J")
+#define xl5_clear_console() printf("\033[H\033[J")
 
 #define _num_of_visible_elements 10
 #define _filler "..................."

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <tuple>
 #include <stdexcept>
 #include "XL5Exceptions.h"
 #include "XL5Log.h"
@@ -29,7 +30,7 @@ class XL5Matrix {
 		// initialize a unit matrix
 		void init_unit() {
 			if (_rows_count != _cols_count) {
-				exc_matrix_not_square();
+				xl5_exc_matrix_not_square();
 			}
 
 			for(int row = 0; row < _rows_count; ++row) {
@@ -48,7 +49,7 @@ class XL5Matrix {
 
 			for(int row = 0; row < _rows_count; ++row) {
 				for(int col = 0; col < _cols_count; ++col) {\
-						T i = (T)((T)rand() % (T)max) + (T)min;
+						T i = (T)((int)((T)rand()) % (int)((T)max)) + (T)min;
 						_matrix_elements[get_index(row, col)] = i;
 				}
 			}
@@ -97,7 +98,7 @@ class XL5Matrix {
 		// multiply 2 matrices AxB = C (Current is A and provided is B, and return a pointer to C)
 		XL5Matrix<T> * multiply(XL5Matrix<T>* B) {
 			if(_cols_count != B->rows_count()) {
-				exc_cannot_multiply_matrices(_cols_count, B->cols_count());
+				xl5_exc_cannot_multiply_matrices(_cols_count, B->cols_count());
 			}
 			int c_rows_count = _rows_count;
 			int c_cols_count = B->cols_count();
@@ -114,12 +115,66 @@ class XL5Matrix {
 							T b = B->get(a_col, c_col);
 							sum += a * b;
 						}
-						
+
 						C->set(c_row, c_col, sum);
 				}
 			}
 
 			return C;
+		}
+
+		// multiply matrix elements by a constant
+		void multiply(T coeficient) {
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+						_matrix_elements[get_index(row, col)] *= coeficient;
+				}
+			}
+		}
+
+		// multiply 2 matrices entry wise (Hadamard) AxB = C (Current is A and provided is B, and return a pointer to C)
+		XL5Matrix<T> * multiply_entry_wise(XL5Matrix<T>* B) {
+			if((_cols_count != B->cols_count()) || (_rows_count != B->rows_count())) {
+				xl5_exc_cannot_multiply_entry_wise_matrices(_cols_count, _rows_count, B->cols_count(), B->rows_count());
+			}
+
+			int c_rows_count = _rows_count;
+			int c_cols_count = _cols_count;
+
+			XL5Matrix<T>* C = new XL5Matrix<T>();
+
+			C->create(c_rows_count, c_cols_count);
+
+			for(int c_row = 0; c_row < c_rows_count; ++c_row) {
+				for(int c_col = 0; c_col < c_cols_count; ++c_col) {
+					T a = _matrix_elements[get_index(c_row, c_col)];
+					T b = B->get(c_row, c_col);
+					C->set(c_row, c_col, a * b);
+				}
+			}
+
+			return C;
+		}
+
+		// multiply 2 matrices entry wise (Hadamard) AxB = C (Current is A and provided is B, and return a pointer to C)
+		XL5Matrix<T> * invert() {
+		}
+
+		// LU decomposition returns a tuple with <L, U> matrices
+		std::tuple<XL5Matrix<T> *, XL5Matrix<T> *> lu_decomposition() {
+			int n = _rows_count;
+			XL5Matrix<T> * L = new XL5Matrix<T>();
+			XL5Matrix<T> * U = new XL5Matrix<T>();
+			L.create(n, n);
+			U.create(n, n);
+			L.init_unit();
+			U.init_constant(0);
+
+			for(int k = 0; k <n; ++k) {
+					U.set(k, k, get(k, k));
+			}
+
+			return  std::make_tuple(NULL, NULL);
 		}
 
 		// drop the matrix from memory
@@ -148,7 +203,6 @@ class XL5Matrix {
 			std::cout << "\033[" << color << "m" << "\033[0m" << std::endl;
 
 		}
-
 	private:
 		T* _matrix_elements;
 		int _rows_count = 0;
@@ -164,7 +218,7 @@ class XL5Matrix {
 			int index = row * _cols_count + col;
 
 			if (index < 0 || index > _rows_count * _cols_count) {
-				exc_index_out_of_range(row, col);
+				xl5_exc_index_out_of_range(row, col);
 			}
 
 			return index;

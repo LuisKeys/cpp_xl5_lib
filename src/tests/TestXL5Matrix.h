@@ -8,12 +8,10 @@ class TestXL5Matrix {
 	public:
 		void test(int verbose) {
 		 	XL5Log log;
-			XL5Matrix<int> A;
-			XL5Matrix<int> B;
+			XL5Matrix<double> A;
+			XL5Matrix<double> B;
 			int rows = 2;
 			int cols = 2;
-
-			clear_console();
 
 			A.create(rows, cols);
 			B.create(rows, cols);
@@ -57,14 +55,28 @@ class TestXL5Matrix {
 				if(verbose)
 					B.log("Matrix B", XL5Color::FG_YELLOW);
 
-				XL5Matrix<int>* C = A.multiply(&B);
+				XL5Matrix<double>* C = A.multiply(&B);
 
 				if(verbose)
 					C->log("Matrix C", XL5Color::FG_YELLOW);
 
+				C->multiply(2);
+
+				if(verbose)
+					C->log("Matrix C * 2", XL5Color::FG_YELLOW);
+
+				XL5Matrix<double>* D = A.multiply_entry_wise(&A);
+
+				if(verbose)
+					D->log("Matrix D", XL5Color::FG_YELLOW);
+
 				A.drop();
 				B.drop();
 				C->drop();
+				D->drop();
+
+				delete C;
+				delete D;
 
 			log.function_end("Test matrix (XL5Matrix) Passed Ok", XL5Color::BG_GREEN);
 		}

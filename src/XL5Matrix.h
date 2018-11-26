@@ -209,15 +209,24 @@ class XL5Matrix {
 		}
 
 		// LUP decomposition returns a tuple with <L, U> matrices and pi vector
-		int* lup_decomposition() {
+		std::tuple<int *, XL5Matrix<T> *, XL5Matrix<T> *> lup_decomposition() {
 			int n = _rows_count;
-			XL5Matrix<T> * Ac = new XL5Matrix<T>();
+			XL5Matrix<T> * L = new XL5Matrix<T>();
+			XL5Matrix<T> * U = new XL5Matrix<T>();
+			L->create(n, n);
+			U->create(n, n);
+			L->init_unit();
+			U->init_constant(0);
+
+			XL5Matrix<T> * Ac;
+			Ac = clone();
+
 			int * pi = new int[n];
 			T p = 0;
 			int kp = 0;
 			int exchange_pi = 0;
 			T exchange_a = 0;
-			Ac = clone();
+
 
 			for(int i = 0; i < n; ++i) {
 				pi[i] = i;
@@ -256,10 +265,22 @@ class XL5Matrix {
 				}
 			}
 
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+					T a = Ac->get(row, col);
+					if(row > col) {
+						L->set(row, col, a);
+					}
+					else {
+						U->set(row, col, a);
+					}
+				}
+			}
+
 			Ac->drop();
 			delete Ac;
 
-			return pi;
+			return  std::make_tuple(pi, L, U);
 		}
 
 		// LUP solve

@@ -34,3 +34,9 @@ inline void xl5_exc_cannot_multiply_entry_wise_matrices(int a_cols, int a_rows, 
   log.value("B Rows", b_rows, XL5Color::FG_BLUE);
   throw std::exception();
 }
+
+inline void xl5_exc_singular_matrix() {
+  XL5Log log;
+  log.exception_msg("Matrix is singular");
+  throw std::exception();
+}

@@ -186,8 +186,6 @@ class XL5Matrix {
 			U->init_constant(0);
 			Ac = clone();
 
-			Ac->log("Matrix Ac", XL5Color::FG_YELLOW, 3);
-
 			for(int k = 0; k <n; ++k) {
 					U->set(k, k, Ac->get(k, k));
 					for(int i = k + 1; i < n; ++i) {
@@ -208,6 +206,86 @@ class XL5Matrix {
 			delete Ac;
 
 			return  std::make_tuple(L, U);
+		}
+
+		// LUP decomposition returns a tuple with <L, U> matrices and pi vector
+		int* lup_decomposition() {
+			int n = _rows_count;
+			XL5Matrix<T> * Ac = new XL5Matrix<T>();
+			int * pi = new int[n];
+			T p = 0;
+			int kp = 0;
+			int exchange_pi = 0;
+			T exchange_a = 0;
+			Ac = clone();
+
+			for(int i = 0; i < n; ++i) {
+				pi[i] = i;
+			}
+
+			for(int k = 0; k < n; ++k) {
+				p = 0;
+				for(int i = k; i < n; ++i) {
+						T abs_a = std::abs(Ac->get(i, k));
+						if(abs_a > p) {
+							p = abs_a;
+							kp = i;
+						}
+				}
+
+				if(p == 0) {
+					xl5_exc_singular_matrix();
+				}
+
+				exchange_pi = pi[k];
+				pi[k] = pi[kp];
+				pi[kp] = exchange_pi;
+
+				for(int i = 0; i < n; ++i) {
+					exchange_a = Ac->get(k, i);
+					Ac->set(k, i, Ac->get(kp, i));
+					Ac->set(kp, i, exchange_a);
+				}
+
+				for(int i = k + 1; k < n; ++k) {
+					T a_ik_div_a_kk = Ac->get(i, k) / Ac->get(k, k);
+					Ac->set(i, k, a_ik_div_a_kk);
+					for(int j = k + 1; j < n; ++j) {
+							Ac->set(i, j, Ac->get(i, j) - Ac->get(i, k) * Ac->get(k, j));
+					}
+				}
+			}
+
+			Ac->drop();
+			delete Ac;
+
+			return pi;
+		}
+
+		// LUP solve
+		T* lup_solve(XL5Matrix<T> * L, XL5Matrix<T> * U, int* pi, T* b) {
+			int n = L->rows_count();
+			T* x = new T[n];
+			T* y = new T[n];
+			for(int i = 0; i < n; ++i) {
+				double sum_l_y = 0;
+				for(int j = 0; j < i; ++j) {
+					sum_l_y += L->get(i, j) * y[j];
+				}
+				y[i] = b[pi[i]] - (T)sum_l_y;
+			}
+
+			for(int i = n - 1; i >= 0; --i) {
+				double sum_u_x = 0;
+				for(int j = i; j < n; ++j) {
+					sum_u_x += U->get(i, j) * x[j];
+				}
+				x[i] = (y[i] - sum_u_x) / U->get(i, i);
+			}
+
+			delete y;
+
+			return x;
 		}
 
 		// drop the matrix from memory

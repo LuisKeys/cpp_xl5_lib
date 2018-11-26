@@ -5,31 +5,7 @@
 
 
 clock_t _begin = clock();
-int _is_enabled = 1;
 int __num_of_visible_elements = 10;
-
-// Write an array with a partial of its first and last elements to the console
-void XL5Log::array(const std::string& description, float * value, int len, int color) {
-	if(_is_enabled == 0) return;
-	int internal_len = len;
-	if(len > _num_of_visible_elements * 2)
-		internal_len = _num_of_visible_elements;
-
-	for(int i = 0; i < internal_len; ++i) {
-		std::cout << "\033[" << color << "m" << description << "[" << i << "]" << " = " << value[i]  << "\033[0m" << std::endl	;
-	}
-
-	if(len > _num_of_visible_elements) {
-		for(int i = 0; i < 3; ++i)
-		std::cout << "\033[" << color << "m" << _filler  << "\033[0m" << std::endl;
-	}
-
-	if(len > _num_of_visible_elements) {
-		for(int i = len - _num_of_visible_elements; i < len; ++i) {
-			std::cout << "\033[" << color << "m" << description << "[" << i << "]" << " = " << value[i]  << "\033[0m" << std::endl;
-		}
-	}
-}
 
 // Write an exception description
 void XL5Log::exception_msg(const std::string& input) {

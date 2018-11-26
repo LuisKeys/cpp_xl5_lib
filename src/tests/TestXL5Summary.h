@@ -34,7 +34,7 @@ class TestXL5Summary {
 			log.function_end("Test Max (XL5Summary) Passed Ok", XL5Color::BG_GREEN);
 
 			if(verbose)
-				log.array("Array to find min", numbers, num_elements, XL5Color::FG_DEFAULT);
+				log.array<float>("Array to find min", numbers, num_elements, XL5Color::FG_DEFAULT);
 
 			float min = summary.min(numbers, num_elements);
 

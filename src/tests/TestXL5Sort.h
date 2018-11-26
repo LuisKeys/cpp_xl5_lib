@@ -16,7 +16,7 @@ class TestXL5Sort {
 			for(int i = num_elements; i >= 0; --i) numbers[num_elements - i - 1] = i;
 
 			if(verbose)
-				log.array("Array to sort", numbers, num_elements, XL5Color::FG_DEFAULT);
+				log.array<float>("Array to sort", numbers, num_elements, XL5Color::FG_DEFAULT);
 
 			sort.sort(numbers, num_elements);
 
@@ -24,7 +24,7 @@ class TestXL5Sort {
 				log.value("number of elements:", num_elements, XL5Color::FG_DEFAULT);
 
 			if(verbose)
-				log.array("Sorted", numbers, num_elements, XL5Color::FG_DEFAULT);
+				log.array<float>("Sorted", numbers, num_elements, XL5Color::FG_DEFAULT);
 
 
 			for(int i = 0; i < num_elements; ++i) {

@@ -57,7 +57,7 @@ class TestXL5Stack {
 		 	}
 
 			if(verbose)
-				log.array("popped numbers", popped_numbers, len, XL5Color::FG_YELLOW);
+				log.array<float>("popped numbers", popped_numbers, len, XL5Color::FG_YELLOW);
 		 	/*
 		 	for(int i = 0; i < 11; ++i) {
 			 	int status = stack.push(numbers);

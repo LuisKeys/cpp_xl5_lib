@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <iomanip>
 #include <tuple>
 #include <stdexcept>
 #include "XL5Exceptions.h"
@@ -165,16 +166,31 @@ class XL5Matrix {
 			int n = _rows_count;
 			XL5Matrix<T> * L = new XL5Matrix<T>();
 			XL5Matrix<T> * U = new XL5Matrix<T>();
-			L.create(n, n);
-			U.create(n, n);
-			L.init_unit();
-			U.init_constant(0);
+			L->create(n, n);
+			U->create(n, n);
+			L->init_unit();
+			U->init_constant(0);
 
 			for(int k = 0; k <n; ++k) {
-					U.set(k, k, get(k, k));
+					U->set(k, k, get(k, k));
+					for(int i = k + 1; i < n; ++i) {
+						float a_div_u = (float)get(i, k) / (float)U->get(k, k);
+						L->set(i, k, (T)a_div_u);
+						U->set(k, i, get(k, i));
+					}
+
+					for(int i = k + 1; i < n; ++i) {
+						for(int j = k + 1; j < n; ++j) {
+							float a = get(i, j) - L->get(i, k) * U->get(k, j);
+							set(i, j, a);
+						}
+					}
 			}
 
-			return  std::make_tuple(NULL, NULL);
+			L->log("Matrix L", XL5Color::FG_YELLOW, 3);
+			U->log("Matrix U", XL5Color::FG_YELLOW, 3);
+
+			return  std::make_tuple(L, U);
 		}
 
 		// drop the matrix from memory
@@ -185,7 +201,7 @@ class XL5Matrix {
 		}
 
 		// Write a matrix with a partial of its first and last elements to the console
-		void log(const std::string& description, int color) {
+		void log(const std::string& description, int color, int decimals) {
 
 			std::cout << "\033[" << color << "m" << description << "\033[0m" << std::endl;
 
@@ -194,7 +210,7 @@ class XL5Matrix {
 
 			for(int row = 0; row < _rows_count; ++row) {
 				for(int col = 0; col < _cols_count; ++col) {
-					std::cout << "\033[" << color << "m" << get(row, col) << "\t";
+					std::cout << "\033[" << color << "m" << std::fixed << std::setprecision(decimals) << get(row, col) << "\t";
 				}
 
 				std::cout << std::endl	;

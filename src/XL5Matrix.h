@@ -161,34 +161,51 @@ class XL5Matrix {
 		XL5Matrix<T> * invert() {
 		}
 
+		// multiply 2 matrices entry wise (Hadamard) AxB = C (Current is A and provided is B, and return a pointer to C)
+		XL5Matrix<T> * clone() {
+			XL5Matrix<T> * Ac = new XL5Matrix<T>();
+			Ac->create(_rows_count, _cols_count);
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+					Ac->set(row, col, get(row, col));
+				}
+			}
+
+			return Ac;
+		}
+
 		// LU decomposition returns a tuple with <L, U> matrices
 		std::tuple<XL5Matrix<T> *, XL5Matrix<T> *> lu_decomposition() {
 			int n = _rows_count;
 			XL5Matrix<T> * L = new XL5Matrix<T>();
 			XL5Matrix<T> * U = new XL5Matrix<T>();
+			XL5Matrix<T> * Ac = new XL5Matrix<T>();
 			L->create(n, n);
 			U->create(n, n);
 			L->init_unit();
 			U->init_constant(0);
+			Ac = clone();
+
+			Ac->log("Matrix Ac", XL5Color::FG_YELLOW, 3);
 
 			for(int k = 0; k <n; ++k) {
-					U->set(k, k, get(k, k));
+					U->set(k, k, Ac->get(k, k));
 					for(int i = k + 1; i < n; ++i) {
-						float a_div_u = (float)get(i, k) / (float)U->get(k, k);
+						float a_div_u = (float)Ac->get(i, k) / (float)U->get(k, k);
 						L->set(i, k, (T)a_div_u);
-						U->set(k, i, get(k, i));
+						U->set(k, i, Ac->get(k, i));
 					}
 
 					for(int i = k + 1; i < n; ++i) {
 						for(int j = k + 1; j < n; ++j) {
-							float a = get(i, j) - L->get(i, k) * U->get(k, j);
-							set(i, j, a);
+							float a = Ac->get(i, j) - L->get(i, k) * U->get(k, j);
+							Ac->set(i, j, a);
 						}
 					}
 			}
 
-			L->log("Matrix L", XL5Color::FG_YELLOW, 3);
-			U->log("Matrix U", XL5Color::FG_YELLOW, 3);
+			Ac->drop();
+			delete Ac;
 
 			return  std::make_tuple(L, U);
 		}

@@ -10,8 +10,8 @@ class TestXL5Matrix {
 		 	XL5Log log;
 			XL5Matrix<double> A;
 			XL5Matrix<double> B;
-			int rows = 2;
-			int cols = 2;
+			int rows = 4;
+			int cols = 4;
 
 			A.create(rows, cols);
 			B.create(rows, cols);
@@ -35,20 +35,45 @@ class TestXL5Matrix {
 
 				A.drop();
 
-				rows = 3;
-				cols = 3;
+				rows = 4;
+				cols = 4;
 
 				A.create(rows, cols);
 
-				A.init_random(1, 10);
+				// Sample from Cormen page 822
+				A.set(0, 0, 2);
+				A.set(0, 1, 3);
+				A.set(0, 2, 1);
+				A.set(0, 3, 5);
+
+				A.set(1, 0, 6);
+				A.set(1, 1, 13);
+				A.set(1, 2, 5);
+				A.set(1, 3, 19);
+
+				A.set(2, 0, 2);
+				A.set(2, 1, 19);
+				A.set(2, 2, 10);
+				A.set(2, 3, 23);
+
+				A.set(3, 0, 4);
+				A.set(3, 1, 10);
+				A.set(3, 2, 11);
+				A.set(3, 3, 31);
 
 				if(verbose)
-					A.log("Matrix A > init to random from 1 to 10", XL5Color::FG_YELLOW, 2);
+					A.log("Matrix A > init for Cormen sample p. 822", XL5Color::FG_YELLOW, 2);
 
 				XL5Matrix<double>* L;
 				XL5Matrix<double>* U;
 
 				std::tie(L, U) = A.lu_decomposition();
+
+				L->log("Matrix L", XL5Color::FG_YELLOW, 3);
+				U->log("Matrix U", XL5Color::FG_YELLOW, 3);
+
+				if(verbose)
+					A.log("Matrix A > init for Cormen sample p. 822", XL5Color::FG_YELLOW, 2);
 
 				// A.traspose();
 				//
@@ -77,7 +102,7 @@ class TestXL5Matrix {
 
 
 				A.drop();
-				// B.drop();
+				B.drop();
 				// C->drop();
 				// D->drop();
 

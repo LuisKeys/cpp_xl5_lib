@@ -159,6 +159,45 @@ class XL5Matrix {
 
 		// multiply 2 matrices entry wise (Hadamard) AxB = C (Current is A and provided is B, and return a pointer to C)
 		XL5Matrix<T> * invert() {
+			int n = _rows_count;
+
+			XL5Matrix * Ainv = new XL5Matrix();
+			Ainv->create(n, n);
+
+			XL5Matrix * I = new XL5Matrix();
+			I->create(n, n);
+			I->init_unit();
+
+			T* i = new T[n];
+
+			for(int col = 0; col < n; ++col) {
+				for(int row = 0; row < n; ++row) {
+					i[row] = I->get(row, col);
+				}
+
+				XL5Matrix<double>* L;
+				XL5Matrix<double>* U;
+				int* pi;
+				std::tie(pi, L, U) = lup_decomposition();
+
+				T* x = lup_solve(L, U, pi, i);
+
+				for(int row = 0; row < n; ++row) {
+					Ainv->set(row, col, x[row]);
+				}
+
+				L->drop();
+				U->drop();
+
+				delete L;
+				delete U;
+				delete pi;
+			}
+
+			I->drop();
+			delete I;
+
+			return Ainv;
 		}
 
 		// multiply 2 matrices entry wise (Hadamard) AxB = C (Current is A and provided is B, and return a pointer to C)

@@ -89,6 +89,25 @@ class TestXL5Matrix {
 				delete pi;
 				delete b;
 
+				// test invert opp
+				XL5Matrix<double>* Ainv = A.invert();
+
+				if(verbose) {
+					Ainv->log("Matrix Ainv > inverted matric of A", XL5Color::FG_GREEN, 2);
+				}
+
+				// Test if inverted matrix is correct
+				XL5Matrix<double>* I = A.multiply(Ainv);
+
+				if(verbose) {
+					I->log("Unit matrix > result of A * Ainv", XL5Color::FG_GREEN, 2);
+				}
+
+				Ainv->drop();
+				I->drop();
+				delete Ainv;
+				delete I;
+
 				// A.traspose();
 				//
 				// if(verbose)

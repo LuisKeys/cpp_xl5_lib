@@ -38,8 +38,7 @@ class TestXL5Matrix {
 
 				A.drop();
 
-				// Test LU decomposition
-
+				// Test LUP decomposition
 				rows = 3;
 				cols = 3;
 
@@ -58,25 +57,14 @@ class TestXL5Matrix {
 				A.set(2, 1, 6);
 				A.set(2, 2, 3);
 
-				std::tie(L, U) = A.lu_decomposition();
-
-				A.log("Matrix A > init for Cormen sample p. 818", XL5Color::FG_YELLOW, 2);
-				L->log("Matrix L", XL5Color::FG_YELLOW, 3);
-				U->log("Matrix U", XL5Color::FG_YELLOW, 3);
-
-				L->drop();
-				U->drop();
-
-				delete L;
-				delete U;
-
 				int* pi;
 				std::tie(pi, L, U) = A.lup_decomposition();
 
 				if(verbose) {
+					A.log("Matrix A > init for Cormen sample p. 818", XL5Color::FG_YELLOW, 2);
 					L->log("Matrix L > init for Cormen sample p. 818", XL5Color::FG_YELLOW, 2);
 					U->log("Matrix U > init for Cormen sample p. 818", XL5Color::FG_YELLOW, 2);
-					// log.array<int>("pi Array", pi, rows, XL5Color::FG_BLUE);
+					log.array<int>("pi Array", pi, rows, XL5Color::FG_BLUE);
 				}
 
 				// Test LUP solve
@@ -89,7 +77,8 @@ class TestXL5Matrix {
 				double* x = A.lup_solve(L, U, pi, b);
 
 				if(verbose) {
-					// log.array<double>("resulting x Array", x, rows, XL5Color::FG_BLUE);
+					log.array<double>("b Array", b, rows, XL5Color::FG_BLUE);
+					log.array<double>("resulting x Array", x, rows, XL5Color::FG_BLUE);
 				}
 
 				L->drop();

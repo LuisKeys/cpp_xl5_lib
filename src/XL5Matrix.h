@@ -256,7 +256,7 @@ class XL5Matrix {
 					Ac->set(kp, i, exchange_a);
 				}
 
-				for(int i = k + 1; k < n; ++k) {
+				for(int i = k + 1; i < n; ++i) {
 					T a_ik_div_a_kk = Ac->get(i, k) / Ac->get(k, k);
 					Ac->set(i, k, a_ik_div_a_kk);
 					for(int j = k + 1; j < n; ++j) {

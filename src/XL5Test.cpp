@@ -15,23 +15,24 @@ void XL5Test::test(int verbose) {
 
   xl5_clear_console();
 
-  TestXL5Matrix testXL5Matrix;
-  testXL5Matrix.test(verbose);
-
-/*
   TestXL5Graph testXL5Graph;
   testXL5Graph.test(verbose);
 
-  TestXL5Stack testXL5Stack;
+/*
+  TestXL5BinaryTree testXL5BinaryTree;
+  TestXL5Graph testXL5Graph;
+  TestXL5Matrix testXL5Matrix;
+  testXL5Matrix.test(verbose);
   TestXL5Sort testXL5Sort;
+  TestXL5Stack testXL5Stack;
   TestXL5Summary testXL5Summary;
   TestXL5Queue testXL5Queue;
-  TestXL5BinaryTree testXL5BinaryTree;
 
+  testXL5BinaryTree.test(verbose);
+  testXL5Graph.test(verbose);
   testXL5Sort.test(verbose);
+  testXL5Stack.test(verbose);
   testXL5Summary.test(verbose);
   testXL5Queue.test(verbose);
-  testXL5BinaryTree.test(verbose);
-  testXL5Stack.test(verbose);
-  */
+*/
 }

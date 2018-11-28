@@ -18,7 +18,7 @@ class TestXL5Stack {
 		 	numbers[2] = 36;
 		 	numbers[3] = 48;
 
-		 	stack.create(1000);
+		 	stack.create(1000, 100);
 
 		 	for(int i = 0; i < len; ++i) {
 			 	int status = stack.push(numbers[i]);

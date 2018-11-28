@@ -15,21 +15,25 @@ class XL5Stack {
 		}
 
 		// create a stack object
-		void create(int max_size) {
+		void create(int max_size, int grow_size) {
 			_stack_elements = (T*)malloc(sizeof(T));
 			_max_size = max_size;
+			_grow_size = grow_size;
 		}
 
 		// push the provided object to the stack
 		int push(T data_object) {
-			T* test = (T*)realloc(_stack_elements, (_top + 1) * sizeof(T));
+			if(_top >= _alloc_space) {
+				_alloc_space = _top + _grow_size;
+				_stack_elements = (T*)realloc(_stack_elements, (_alloc_space) * sizeof(T));
+			}
+
 			_stack_elements[_top] = data_object;
 
-			if(!test){
+			if(!_stack_elements){
 				throw std::bad_alloc();
 			}
 
-			// _stack_elements[_top] = data_object;
 			++_top;
 			if(_top == _max_size) return XL5_STACK_ERR_STACK_OVERFLOW;
 
@@ -116,5 +120,7 @@ class XL5Stack {
 	private:
 		T* _stack_elements;
 		int _top = 0;
+		int _grow_size = 0;
+		int _alloc_space = 0;
 		int _max_size = 0;
 };

@@ -16,6 +16,9 @@ class TestXL5Image {
       string base_path = "./data/att_faces/s1/";
       int type = image.load_pgm(base_path + string("1.pgm"));
       XL5Matrix<uint8_t>* image_data = image.get_gray_channel_data();
-      image.save_pgm_gray("proc_1.pgm", image_data, "XL5 Processed pgm image");
+      XL5Matrix<uint8_t>* horiz_gradients = image_filters.get_horizontal_gradient(image_data);
+      image.save_pgm_gray("h_grads_1.pgm", horiz_gradients, "XL5 Horizontal gradients");
+      XL5Matrix<uint8_t>* vertical_gradients = image_filters.get_vertical_gradient(image_data);
+      image.save_pgm_gray("v_grads_1.pgm", vertical_gradients, "XL5 Vertical gradients");
     }
 };

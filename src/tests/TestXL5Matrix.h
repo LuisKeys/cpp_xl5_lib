@@ -58,7 +58,7 @@ class TestXL5Matrix {
 				A.set(2, 2, 3);
 
 				int* pi;
-				std::tie(pi, L, U) = A.lup_decomposition();
+				tie(pi, L, U) = A.lup_decomposition();
 
 				if(verbose) {
 					A.log("Matrix A > init for Cormen sample p. 818", XL5Color::FG_YELLOW, 2);

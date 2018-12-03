@@ -32,12 +32,12 @@ public:
 
   // log base node
   void log_base_node() {
-    std::cout << "\033[" << XL5Color::BG_BLUE << "m" << " " << _node_id<< " " << "\033[0m";
+    cout << "\033[" << XL5Color::BG_BLUE << "m" << " " << _node_id<< " " << "\033[0m";
   }
 
   // log linked node
   void log_linked_node() {
-    std::cout << "\033[" << XL5Color::BG_GREEN << "m" << " " << _node_id<< " " << "\033[0m";
+    cout << "\033[" << XL5Color::BG_GREEN << "m" << " " << _node_id<< " " << "\033[0m";
   }
 
 private:

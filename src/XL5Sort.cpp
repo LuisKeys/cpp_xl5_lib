@@ -22,8 +22,8 @@ void merge_results(int left_index, int middle_index, int right_index) {
 	for(int j = 0; j < right_n; ++j)
 		right[j] = _input[middle_index + j];
 
-	left[left_n] = std::numeric_limits<float>::max();
-	right[right_n] = std::numeric_limits<float>::max();
+	left[left_n] = numeric_limits<float>::max();
+	right[right_n] = numeric_limits<float>::max();
 
 	int i = 0, j = 0;
 

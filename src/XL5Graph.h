@@ -64,19 +64,19 @@ class XL5Graph {
         for(int j = 1; j < sub_n; ++j) {
           XL5GraphNode* linked_node = child_root_stack->get(j);
           if(is_directed == 0)
-            std::cout << '<'<< '-'<< '>';
+            cout << '<'<< '-'<< '>';
           else
-            std::cout << '-'<< '-'<< '>';
+            cout << '-'<< '-'<< '>';
 
           linked_node->log_linked_node();
         }
 
-        std::cout << '\n';
-        std::cout << '\n';
+        cout << '\n';
+        cout << '\n';
       }
 
-      std::cout << '\n';
-      std::cout << '\n';
+      cout << '\n';
+      cout << '\n';
     }
 
   private:

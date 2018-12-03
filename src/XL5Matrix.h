@@ -178,7 +178,7 @@ class XL5Matrix {
 				XL5Matrix<double>* L;
 				XL5Matrix<double>* U;
 				int* pi;
-				std::tie(pi, L, U) = lup_decomposition();
+				tie(pi, L, U) = lup_decomposition();
 
 				T* x = lup_solve(L, U, pi, i);
 
@@ -214,7 +214,7 @@ class XL5Matrix {
 		}
 
 		// LU decomposition returns a tuple with <L, U> matrices
-		std::tuple<XL5Matrix<T> *, XL5Matrix<T> *> lu_decomposition() {
+		tuple<XL5Matrix<T> *, XL5Matrix<T> *> lu_decomposition() {
 			int n = _rows_count;
 			XL5Matrix<T> * L = new XL5Matrix<T>();
 			XL5Matrix<T> * U = new XL5Matrix<T>();
@@ -244,11 +244,11 @@ class XL5Matrix {
 			Ac->drop();
 			delete Ac;
 
-			return  std::make_tuple(L, U);
+			return  make_tuple(L, U);
 		}
 
 		// LUP decomposition returns a tuple with <L, U> matrices and pi vector
-		std::tuple<int *, XL5Matrix<T> *, XL5Matrix<T> *> lup_decomposition() {
+		tuple<int *, XL5Matrix<T> *, XL5Matrix<T> *> lup_decomposition() {
 			int n = _rows_count;
 			XL5Matrix<T> * L = new XL5Matrix<T>();
 			XL5Matrix<T> * U = new XL5Matrix<T>();
@@ -274,7 +274,7 @@ class XL5Matrix {
 			for(int k = 0; k < n; ++k) {
 				p = 0;
 				for(int i = k; i < n; ++i) {
-						T abs_a = std::abs(Ac->get(i, k));
+						T abs_a = abs(Ac->get(i, k));
 						if(abs_a > p) {
 							p = abs_a;
 							kp = i;
@@ -319,7 +319,7 @@ class XL5Matrix {
 			Ac->drop();
 			delete Ac;
 
-			return  std::make_tuple(pi, L, U);
+			return  make_tuple(pi, L, U);
 		}
 
 		// LUP solve
@@ -356,22 +356,22 @@ class XL5Matrix {
 		}
 
 		// Write a matrix with a partial of its first and last elements to the console
-		void log(const std::string& description, int color, int decimals) {
+		void log(const string& description, int color, int decimals) {
 
-			std::cout << "\033[" << color << "m" << description << "\033[0m" << std::endl;
+			cout << "\033[" << color << "m" << description << "\033[0m" << endl;
 
-			std::cout << "\033[" << color << "m" << "Rows:" << _rows_count << "\033[0m" << std::endl;
-			std::cout << "\033[" << color << "m" << "Cols:" << _cols_count << "\033[0m" << std::endl;
+			cout << "\033[" << color << "m" << "Rows:" << _rows_count << "\033[0m" << endl;
+			cout << "\033[" << color << "m" << "Cols:" << _cols_count << "\033[0m" << endl;
 
 			for(int row = 0; row < _rows_count; ++row) {
 				for(int col = 0; col < _cols_count; ++col) {
-					std::cout << "\033[" << color << "m" << std::fixed << std::setprecision(decimals) << get(row, col) << "\t";
+					cout << "\033[" << color << "m" << fixed << setprecision(decimals) << get(row, col) << "\t";
 				}
 
-				std::cout << std::endl	;
+				cout << endl	;
 			}
 
-			std::cout << "\033[" << color << "m" << "\033[0m" << std::endl;
+			cout << "\033[" << color << "m" << "\033[0m" << endl;
 
 		}
 	private:

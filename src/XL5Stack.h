@@ -31,7 +31,7 @@ class XL5Stack {
 			_stack_elements[_top] = data_object;
 
 			if(!_stack_elements){
-				throw std::bad_alloc();
+				throw bad_alloc();
 			}
 
 			++_top;
@@ -76,7 +76,7 @@ class XL5Stack {
 			T* test = (T*)realloc(_stack_elements, (_top + 1) * sizeof(T));
 
 			if(!test){
-				throw std::bad_alloc();
+				throw bad_alloc();
 			}
 
 			++_top;

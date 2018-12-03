@@ -10,6 +10,7 @@
 #define _filler "..................."
 #define _long_filler "......................................"
 
+using namespace std;
 // Colors definitions to log in the console using different fg and bg colors
 namespace XL5Color {
   enum Code {
@@ -42,57 +43,57 @@ class XL5Log {
 	public:
     // Write an array with a partial of its first and last elements to the console
     template<typename T>
-    void array(const std::string& description, T * value, int len, int color) {
+    void array(const string& description, T * value, int len, int color) {
     	if(_is_enabled == 0) return;
     	int internal_len = len;
     	if(len > _num_of_visible_elements * 2)
     		internal_len = _num_of_visible_elements;
 
     	for(int i = 0; i < internal_len; ++i) {
-    		std::cout << "\033[" << color << "m" << description << "[" << i << "]" << " = " << value[i]  << "\033[0m" << std::endl	;
+    		cout << "\033[" << color << "m" << description << "[" << i << "]" << " = " << value[i]  << "\033[0m" << endl	;
     	}
 
     	if(len > _num_of_visible_elements) {
     		for(int i = 0; i < 3; ++i)
-    		std::cout << "\033[" << color << "m" << _filler  << "\033[0m" << std::endl;
+    		cout << "\033[" << color << "m" << _filler  << "\033[0m" << endl;
     	}
 
     	if(len > _num_of_visible_elements) {
     		for(int i = len - _num_of_visible_elements; i < len; ++i) {
-    			std::cout << "\033[" << color << "m" << description << "[" << i << "]" << " = " << value[i]  << "\033[0m" << std::endl;
+    			cout << "\033[" << color << "m" << description << "[" << i << "]" << " = " << value[i]  << "\033[0m" << endl;
     		}
     	}
     }
 
     // Write an exception description
-		void exception_msg(const std::string& input);
+		void exception_msg(const string& input);
 
     // Write when a function ends and displays elapsed execution time to the console
-		void function_end(const std::string& input, int color);
+		void function_end(const string& input, int color);
 
     // Write when a function start to execute to the console
-		void function_start(const std::string& input, int color);
+		void function_start(const string& input, int color);
 
     // Write a line of text to the console
-		void text(const std::string& input, int color);
+		void text(const string& input, int color);
 
     // Write a line of text to the console without new line
-		void text_line(const std::string& input, int color);
+		void text_line(const string& input, int color);
 
     // Write a separator line with dots to the console
     void separator(int color);
 
     // Write a int value to the console
-		void value(const std::string& description, int value, int color);
+		void value(const string& description, int value, int color);
 
     // Write a float value to the console
-		void value(const std::string& description, float value, int color);
+		void value(const string& description, float value, int color);
 
     // Write a int value to the console without new line
-		void value_line(const std::string& description, int value, int color);
+		void value_line(const string& description, int value, int color);
 
     // Write a float value to the console without new line
-		void value_line(const std::string& description, float value, int color);
+		void value_line(const string& description, float value, int color);
 
   private:
     int _is_enabled = 1;

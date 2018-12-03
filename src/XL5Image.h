@@ -5,7 +5,7 @@
 #include <sstream>
 #include "XL5Matrix.h"
 
-#define VERBOSE 1
+#define VERBOSE 0
 
 using namespace std;
 // Images object and its related basic operations

@@ -1,7 +1,11 @@
 #pragma once
 
 #include <iostream>
+#include <limits>
 #include "XL5Matrix.h"
+
+#define MAX_VALUE 255
+#define MID_VALUE 128
 
 using namespace std;
 // Images object and its related basic operations
@@ -19,6 +23,69 @@ class XL5ImageFilters {
       return _get_color_jump(image_data, 120, 0);
     }
 
+    XL5Matrix<uint8_t> * get_horizontal_bw_histogram_peaks(XL5Matrix<uint8_t> * image_data) {
+      XL5Matrix<uint8_t> * horizontal_histogram = new XL5Matrix<uint8_t>();
+      int rows_count = image_data->rows_count();
+      int cols_count = image_data->cols_count();
+      int row_histogram_value = image_data->cols_count();
+      uint8_t value;
+      int min = 0;
+      int min_row = 0;
+      int* histograms = new int[rows_count];
+      int* offsets = new int[2];
+      int bandwidth = (int)((float)rows_count * 0.25);
+      offsets[0] = (int)((float)rows_count * 0.35);
+      offsets[1]= (int)((float)rows_count * 0.7);
+
+      horizontal_histogram->create(rows_count, cols_count);
+
+
+      for(int row = 0; row < rows_count; ++row) {
+        row_histogram_value = 0;
+        for(int col = 0; col < cols_count; ++col) {
+          value = image_data->get(row, col);
+
+          if(value == MAX_VALUE)
+            row_histogram_value++;
+        }
+
+
+        for(int col = 0; col < row_histogram_value; ++col) {
+          horizontal_histogram->set(row, col, MAX_VALUE);
+        }
+
+        histograms[row] = row_histogram_value;
+      }
+
+      for(int i = 0; i < 2; ++i) {
+        min = numeric_limits<int>::max();
+        min_row = 0;
+        for(int row = offsets[i]; row < offsets[i] + bandwidth; ++row) {
+          if(min > histograms[row]) {
+            min = histograms[row];
+            min_row = row;
+          }
+        }
+
+        for(int col = 0; col < cols_count; ++col) {
+          horizontal_histogram->set(min_row - 1, col, MID_VALUE);
+          horizontal_histogram->set(min_row, col, MID_VALUE);
+        }
+      }
+
+      for(int row = 0; row < rows_count; ++row) {
+        for(int col = 0; col < cols_count; ++col) {
+          value = image_data->get(row, col);
+          if(value == 0)
+            horizontal_histogram->set(row, col, value);
+        }
+      }
+
+      delete histograms;
+      return horizontal_histogram;
+    }
+
+
     XL5Matrix<uint8_t> * get_threhold(XL5Matrix<uint8_t> * image_data, int threhold) {
       XL5Matrix<uint8_t> * threholded_gradients = new XL5Matrix<uint8_t>();
       int rows_count = image_data->rows_count();
@@ -31,7 +98,7 @@ class XL5ImageFilters {
           value = image_data->get(row, col - 1);
 
           if(value > threhold)
-            value = 255;
+            value = MAX_VALUE;
           else
             value = 0;
           threholded_gradients->set(row, col, value);
@@ -117,7 +184,7 @@ class XL5ImageFilters {
           value = image_data->get(row, col - 1);
           if(is_increase == 1) {
             if(value > threhold)
-              value = 255;
+              value = MAX_VALUE;
           }
           else {
             if(value < threhold)

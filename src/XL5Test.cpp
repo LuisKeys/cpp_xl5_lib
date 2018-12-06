@@ -2,8 +2,8 @@
 #include "XL5Test.h"
 #include "XL5Log.h"
 #include "tests/TestXL5BinaryTree.h"
+#include "tests/TestXL5FastFaceRecognition.h"
 #include "tests/TestXL5Graph.h"
-#include "tests/TestXL5Image.h"
 #include "tests/TestXL5Matrix.h"
 #include "tests/TestXL5Sort.h"
 #include "tests/TestXL5Stack.h"
@@ -16,8 +16,8 @@ void XL5Test::test(int verbose) {
 
   xl5_clear_console();
 
-  TestXL5Image testXL5Image;
-  testXL5Image.test(verbose);
+  TestXL5FastFaceRecognition testXL5FastFaceRecognition;
+  testXL5FastFaceRecognition.test(verbose);
 
 /*
   TestXL5BinaryTree testXL5BinaryTree;

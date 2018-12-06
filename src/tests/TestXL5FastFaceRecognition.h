@@ -4,14 +4,19 @@
 #include "../XL5Log.h"
 #include "../XL5Image.h"
 #include "../XL5ImageFilters.h"
+#include "../XL5ImagePatterns.h"
 
-class TestXL5Image {
+class TestXL5FastFaceRecognition {
   public:
     void test(int verbose) {
       XL5Log log;
+      XL5ImagePatterns image_patterns;
       log.function_start("Start faces recognition training", XL5Color::FG_BLUE);
 
-      for(int person_id = 1; person_id < 11; ++person_id) {
+      image_patterns.load_paterns("./data/eyes/");
+      image_patterns.drop_patterns();
+
+      for(int person_id = 1; person_id < 2; ++person_id) {
         if(person_id != 2 && person_id != 4 && person_id != 6) {
           for(int posse_id = 1; posse_id < 11; ++posse_id) {
           _preprocess(person_id, posse_id);
@@ -29,54 +34,52 @@ class TestXL5Image {
       int cols_count = image_data->cols_count();
       int row_histogram_value = image_data->cols_count();
       uint8_t value;
-      int min = 0;
-      int min_row = 0;
+      int max = 0;
+      int max_row = 0;
       int* histograms = new int[rows_count];
       int* offsets = new int[2];
       int bandwidth = (int)((float)rows_count * 0.25);
       offsets[0] = (int)((float)rows_count * 0.35);
       offsets[1]= (int)((float)rows_count * 0.7);
 
-      horizontal_histogram->create(rows_count, cols_count);
-
+      horizontal_histogram->create(rows_count, cols_count, MAX_BW_IMAGE_VALUE);
 
       for(int row = 0; row < rows_count; ++row) {
         row_histogram_value = 0;
         for(int col = 0; col < cols_count; ++col) {
           value = image_data->get(row, col);
 
-          if(value == MAX_VALUE)
+          if(value == MIN_BW_IMAGE_VALUE)
             row_histogram_value++;
         }
 
-
         for(int col = 0; col < row_histogram_value; ++col) {
-          horizontal_histogram->set(row, col, MAX_VALUE);
+          horizontal_histogram->set(row, col, MIN_BW_IMAGE_VALUE);
         }
 
         histograms[row] = row_histogram_value;
       }
 
       for(int i = 0; i < 2; ++i) {
-        min = numeric_limits<int>::max();
-        min_row = 0;
+        max = numeric_limits<int>::min();
+        max_row = 0;
         for(int row = offsets[i]; row < offsets[i] + bandwidth; ++row) {
-          if(min > histograms[row]) {
-            min = histograms[row];
-            min_row = row;
+          if(max < histograms[row]) {
+            max = histograms[row];
+            max_row = row;
           }
         }
 
         for(int col = 0; col < cols_count; ++col) {
-          horizontal_histogram->set(min_row - 1, col, MID_VALUE);
-          horizontal_histogram->set(min_row, col, MID_VALUE);
+          horizontal_histogram->set(max_row - 1, col, MID_BW_IMAGE_VALUE);
+          horizontal_histogram->set(max_row, col, MID_BW_IMAGE_VALUE);
         }
       }
 
       for(int row = 0; row < rows_count; ++row) {
         for(int col = 0; col < cols_count; ++col) {
           value = image_data->get(row, col);
-          if(value == 0)
+          if(value == MIN_BW_IMAGE_VALUE)
             horizontal_histogram->set(row, col, value);
         }
       }
@@ -110,7 +113,7 @@ class TestXL5Image {
       // image.save_pgm_gray(string("BW_") + dest_file, gradients_b_w, "XL5 gradients b w");
 
       XL5Matrix<uint8_t>* horizontal_bw_histogram_peaks = _get_horizontal_bw_histogram_peaks(gradients_b_w);
-      image.save_pgm_gray(string("horiz_hist_") + dest_file, horizontal_bw_histogram_peaks, "XL5 horizontal b w histogram peaks");
+      // image.save_pgm_gray(string("horiz_hist_") + dest_file, horizontal_bw_histogram_peaks, "XL5 horizontal b w histogram peaks");
 
       // delete buffers
       delete image_data;

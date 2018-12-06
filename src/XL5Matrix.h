@@ -11,12 +11,12 @@ template<class T>
 class XL5Matrix {
 	public:
 		// create a matrix object with given rows and cols
-		void create(int rows_count, int cols_count) {
+		void create(int rows_count, int cols_count, T constant) {
 			_matrix_elements = (T*)malloc(sizeof(T) * rows_count * cols_count);
 			_rows_count = rows_count;
 			_cols_count = cols_count;
 			for(int i = 0; i < _rows_count * _cols_count; ++i)
-				_matrix_elements[i] = 0;
+				_matrix_elements[i] = constant;
 		}
 
 		// initialize the matrix with a constant value
@@ -106,7 +106,7 @@ class XL5Matrix {
 
 			XL5Matrix<T>* C = new XL5Matrix<T>();
 
-			C->create(c_rows_count, c_cols_count);
+			C->create(c_rows_count, c_cols_count, 0);
 
 			for(int c_row = 0; c_row < c_rows_count; ++c_row) {
 				for(int c_col = 0; c_col < c_cols_count; ++c_col) {
@@ -162,10 +162,10 @@ class XL5Matrix {
 			int n = _rows_count;
 
 			XL5Matrix * Ainv = new XL5Matrix();
-			Ainv->create(n, n);
+			Ainv->create(n, n, 0);
 
 			XL5Matrix * I = new XL5Matrix();
-			I->create(n, n);
+			I->create(n, n, 0);
 			I->init_unit();
 
 			T* i = new T[n];
@@ -203,7 +203,7 @@ class XL5Matrix {
 		// multiply 2 matrices entry wise (Hadamard) AxB = C (Current is A and provided is B, and return a pointer to C)
 		XL5Matrix<T> * clone() {
 			XL5Matrix<T> * Ac = new XL5Matrix<T>();
-			Ac->create(_rows_count, _cols_count);
+			Ac->create(_rows_count, _cols_count, 0);
 			for(int row = 0; row < _rows_count; ++row) {
 				for(int col = 0; col < _cols_count; ++col) {
 					Ac->set(row, col, get(row, col));
@@ -252,8 +252,8 @@ class XL5Matrix {
 			int n = _rows_count;
 			XL5Matrix<T> * L = new XL5Matrix<T>();
 			XL5Matrix<T> * U = new XL5Matrix<T>();
-			L->create(n, n);
-			U->create(n, n);
+			L->create(n, n, 0);
+			U->create(n, n, 0);
 			L->init_unit();
 			U->init_constant(0);
 

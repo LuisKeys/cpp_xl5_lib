@@ -68,7 +68,7 @@ class XL5Image {
 
         if(_type == 5) {
           _gray_channel = new XL5Matrix<uint8_t>();
-          _gray_channel->create(_height, _width);
+          _gray_channel->create(_height, _width, 0);
           char byte_buffer = 0;
           float float_buffer = 0;
           for(int row = 0; row < _height; ++row) {

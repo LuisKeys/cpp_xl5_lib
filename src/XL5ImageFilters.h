@@ -4,8 +4,9 @@
 #include <limits>
 #include "XL5Matrix.h"
 
-#define MAX_VALUE 255
-#define MID_VALUE 128
+#define MAX_BW_IMAGE_VALUE 255
+#define MID_BW_IMAGE_VALUE 128
+#define MIN_BW_IMAGE_VALUE 0
 
 using namespace std;
 // Images object and its related basic operations
@@ -28,14 +29,14 @@ class XL5ImageFilters {
       int rows_count = image_data->rows_count();
       int cols_count = image_data->cols_count();
       uint8_t value;
-      threholded_gradients->create(rows_count, cols_count);
+      threholded_gradients->create(rows_count, cols_count, 0);
 
       for(int row = 1; row < rows_count - 1; ++row) {
         for(int col = 1; col < cols_count - 1; ++col) {
           value = image_data->get(row, col - 1);
 
           if(value > threhold)
-            value = MAX_VALUE;
+            value = MAX_BW_IMAGE_VALUE;
           else
             value = 0;
           threholded_gradients->set(row, col, value);
@@ -56,7 +57,7 @@ class XL5ImageFilters {
       if(rows_count < 1 || cols_count < 3)
          return horiz_gradients;
 
-      horiz_gradients->create(rows_count, cols_count);
+      horiz_gradients->create(rows_count, cols_count, 0);
 
       for(int row = 1; row < rows_count - 1; ++row) {
         for(int col = 1; col < cols_count - 1; ++col) {
@@ -88,7 +89,7 @@ class XL5ImageFilters {
       if(rows_count < 3 || cols_count < 1)
          return vertical_gradients;
 
-      vertical_gradients->create(rows_count, cols_count);
+      vertical_gradients->create(rows_count, cols_count, 0);
 
       for(int row = 1; row < rows_count - 1; ++row) {
         for(int col = 1; col < cols_count - 1; ++col) {
@@ -114,14 +115,14 @@ class XL5ImageFilters {
       int rows_count = image_data->rows_count();
       int cols_count = image_data->cols_count();
       uint8_t value;
-      threholded_image->create(rows_count, cols_count);
+      threholded_image->create(rows_count, cols_count, 0);
 
       for(int row = 1; row < rows_count - 1; ++row) {
         for(int col = 1; col < cols_count - 1; ++col) {
           value = image_data->get(row, col - 1);
           if(is_increase == 1) {
             if(value > threhold)
-              value = MAX_VALUE;
+              value = MAX_BW_IMAGE_VALUE;
           }
           else {
             if(value < threhold)

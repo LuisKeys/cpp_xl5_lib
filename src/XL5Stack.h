@@ -16,7 +16,7 @@ class XL5Stack {
 
 		// create a stack object
 		void create(int max_size, int grow_size) {
-			_stack_elements = (T*)malloc(sizeof(T));
+			_stack_elements = (T*)malloc((_alloc_space) * sizeof(T));
 			_max_size = max_size;
 			_grow_size = grow_size;
 		}
@@ -117,6 +117,18 @@ class XL5Stack {
 		 	}
 		}
 
+		// Write stack elements to the console
+		void log(const string& description, int color) {
+
+			cout << "\033[" << color << "m" << description << "\033[0m" << endl;
+
+			for(int i = 0; i < _top; ++i) {
+				cout << "\033[" << color << "m" << get(i) << endl;
+			}
+
+			cout << "\033[" << color << "m" << "\033[0m" << endl;
+
+		}
 	private:
 		T* _stack_elements;
 		int _top = 0;

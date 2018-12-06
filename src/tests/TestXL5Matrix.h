@@ -16,8 +16,8 @@ class TestXL5Matrix {
 			int rows = 4;
 			int cols = 4;
 			// Test matrix creation and initialize ops
-			A.create(rows, cols);
-			B.create(rows, cols);
+			A.create(rows, cols, 0);
+			B.create(rows, cols, 0);
 
 			A.init_unit();
 
@@ -42,7 +42,7 @@ class TestXL5Matrix {
 				rows = 3;
 				cols = 3;
 
-				A.create(rows, cols);
+				A.create(rows, cols, 0);
 
 				// Sample from Cormen page 818
 				A.set(0, 0, 1);

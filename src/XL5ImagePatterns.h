@@ -3,6 +3,7 @@
 #include <iostream>
 #include <limits>
 #include "XL5File.h"
+#include "XL5Image.h"
 #include "XL5Matrix.h"
 #include "XL5Stack.h"
 using namespace std;
@@ -14,8 +15,13 @@ class XL5ImagePatterns {
       _patterns_buffer = new XL5Stack<XL5Matrix<uint8_t>*>();
       XL5Stack<string>* files = file.list_dir(patterns_path);
       for(int i = 0; i < files->size(); ++i) {
-        
+        XL5Image* pattern = new XL5Image();
+        string full_path = patterns_path + files->get(i);
+        pattern->load_pgm(full_path);
+        XL5Matrix<uint8_t>* pattern_data = pattern->get_gray_channel_data();
+        _patterns_buffer->push(pattern_data);
       }
+      _patterns_buffer->log("Patterns pointers:", XL5Color::FG_GREEN);
       delete files;
     }
 

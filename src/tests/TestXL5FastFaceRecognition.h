@@ -19,7 +19,7 @@ class TestXL5FastFaceRecognition {
       for(int person_id = 1; person_id < 2; ++person_id) {
         if(person_id != 2 && person_id != 4 && person_id != 6) {
           for(int posse_id = 1; posse_id < 11; ++posse_id) {
-          _preprocess(person_id, posse_id);
+          // _preprocess(person_id, posse_id);
           }
         }
       }

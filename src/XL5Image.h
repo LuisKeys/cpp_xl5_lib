@@ -5,7 +5,7 @@
 #include <sstream>
 #include "XL5Matrix.h"
 
-#define VERBOSE 0
+#define VERBOSE 1
 
 using namespace std;
 // Images object and its related basic operations
@@ -18,8 +18,11 @@ class XL5Image {
 
     // Load a PGM file
     int load_pgm(const string& image_path) {
+
+      if(VERBOSE == 1)
+        cout << image_path << endl;
+
       ifstream image_file(image_path, ifstream::in);
-      cout << image_path << endl;
       string input_line = "";
       string width_str = "";
       string height_str = "";
@@ -34,52 +37,67 @@ class XL5Image {
           cout << "Portable GrayMap - Binary" << endl;
       }
 
-        // Second line : comment or size if no comment
+      // Second line : comment or size if no comment
+      getline(image_file, input_line);
+      if(input_line.find("#") == 0) {
+        // Comment found
+        _comment = input_line;
+        // Third line : size
+        getline(image_file, input_line, ' ');
+        _width = stoi(input_line);
+
         getline(image_file, input_line);
-        if(input_line.find("#") == 0) {
-          // Comment found
-          _comment = input_line;
-          // Third line : size
-          getline(image_file, input_line, ' ');
-          _width = stoi(input_line);
-
-          getline(image_file, input_line);
-          _height = stoi(input_line);
-        }
-        else {
-          int found_index = input_line.find(" ");
-          width_str = input_line.substr(0, found_index);
-          _width = stoi(input_line);
-          height_str = input_line.substr(found_index + 1);
-          _height = stoi(height_str);
-        }
-
-        // Third line : maximum value
-        getline(image_file, input_line);
-        _maximum_value = stoi(input_line);
-
-        if(VERBOSE == 1) {
-          cout << "Commment:" << _comment << endl;
-          cout << "Width:" << _width << endl;
-          cout << "Height:" << _height << endl;
-          cout << "Maximum_value:" << _maximum_value << endl;
-        }
-
-
-        if(_type == 5) {
-          _gray_channel = new XL5Matrix<uint8_t>();
-          _gray_channel->create(_height, _width, 0);
-          char byte_buffer = 0;
-          float float_buffer = 0;
-          for(int row = 0; row < _height; ++row) {
-            for(int col = 0; col < _width; ++col) {
-              image_file.read(&byte_buffer, 1);
-              float_buffer = (float)byte_buffer;
-              float_buffer *= 255.0 / _maximum_value;
-              _gray_channel->set(row, col, (uint8_t)float_buffer);
-            }
-          }
+        _height = stoi(input_line);
       }
+      else {
+        int found_index = input_line.find(" ");
+        width_str = input_line.substr(0, found_index);
+        _width = stoi(input_line);
+        height_str = input_line.substr(found_index + 1);
+        _height = stoi(height_str);
+      }
+
+      // Third line : maximum value
+      getline(image_file, input_line);
+      _maximum_value = stoi(input_line);
+
+      if(VERBOSE == 1) {
+        cout << "Commment:" << _comment << endl;
+        cout << "Width:" << _width << endl;
+        cout << "Height:" << _height << endl;
+        cout << "Maximum_value:" << _maximum_value << endl;
+      }
+
+      if(_type == 5) {
+        _gray_channel = new XL5Matrix<uint8_t>();
+        _gray_channel->create(_height, _width, 0);
+        char byte_buffer = 0;
+        float float_buffer = 0;
+        for(int row = 0; row < _height; ++row) {
+          for(int col = 0; col < _width; ++col) {
+            image_file.read(&byte_buffer, 1);
+            float_buffer = (float)byte_buffer;
+            float_buffer *= 255.0 / _maximum_value;
+            _gray_channel->set(row, col, (uint8_t)float_buffer);
+          }
+        }
+      }
+
+      if(_type == 2) {
+        _gray_channel = new XL5Matrix<uint8_t>();
+        _gray_channel->create(_height, _width, 0);
+        char byte_buffer = 0;
+        float float_buffer = 0;
+        for(int row = 0; row < _height; ++row) {
+          for(int col = 0; col < _width; ++col) {
+            image_file.read(&byte_buffer, 1);
+            float_buffer = (float)byte_buffer;
+            float_buffer *= 255.0 / _maximum_value;
+            _gray_channel->set(row, col, (uint8_t)float_buffer);
+          }
+        }
+      }
+
       return _type;
     }
 

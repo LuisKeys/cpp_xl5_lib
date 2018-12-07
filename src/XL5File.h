@@ -16,15 +16,11 @@ class XL5File {
       struct dirent* dir_ent;
       DIR* dir = opendir(patterns_path.c_str());
       while ((dir_ent = readdir(dir)) != NULL) {
-        cout << dir_ent->d_name << endl;
         string file = string(dir_ent->d_name);
-        // string file = string("test");
         if(file != "." && file != "..")
           files->push(file);
       }
       (void)closedir(dir);
-
-      files->log("Files:", XL5Color::FG_GREEN);
 
       return files;
     }

@@ -22,7 +22,7 @@ class TestXL5FastFaceRecognition {
       image_patterns.load_paterns("./data/eyes/");
       image_patterns.drop_patterns();
 
-      for(int person_id = 1; person_id < 2; ++person_id) {
+      for(int person_id = 1; person_id < 6; ++person_id) {
         if(person_id != 2 && person_id != 4 && person_id != 6) {
           for(int posse_id = 1; posse_id < 11; ++posse_id) {
           _preprocess(person_id, posse_id);
@@ -100,50 +100,81 @@ class TestXL5FastFaceRecognition {
       return make_tuple(horizontal_histogram, eyes_row, mouth_row);;
     }
 
-    tuple<MATRIX, RECTANGLE, RECTANGLE, RECTANGLE> _get_scan_areas(MATRIX image_data, int eyes_row, int mouth_row) {
+    tuple<MATRIX, RECTANGLE, RECTANGLE, RECTANGLE> _get_scan_areas(MATRIX original_image_data, MATRIX bw_image_data, int eyes_row, int mouth_row) {
       MATRIX scan_areas_bw_image = new XL5Matrix<uint8_t>();
-      RECTANGLE _left_eye = new XL5Rectangle<int>();
-      RECTANGLE _right_eye = new XL5Rectangle<int>();
-      RECTANGLE _mouth = new XL5Rectangle<int>();
-      int rows_count = image_data->rows_count();
-      int cols_count = image_data->cols_count();
+      RECTANGLE left_eye = new XL5Rectangle<int>();
+      RECTANGLE right_eye = new XL5Rectangle<int>();
+      RECTANGLE mouth = new XL5Rectangle<int>();
+      int rows_count = original_image_data->rows_count();
+      int cols_count = original_image_data->cols_count();
       int bandwidth = (int)((float)rows_count * 0.1);
-      int eyes_border_offset = (int)((float)cols_count * 0.08);
-      int eyes_central_offset = (int)((float)cols_count * 0.04);
+      int eyes_border_offset = (int)((float)cols_count * 0.15);
+      int eyes_central_offset = (int)((float)cols_count * 0.01);
       int mouth_border_offset = (int)((float)cols_count * 0.15);
+      int cg_eyes_offset = (int)((float)cols_count * 0.15);
+      int cg_mouth_offset = (int)((float)cols_count * 0.26);
       uint8_t value;
       XL5Summary summary;
 
-      scan_areas_bw_image->create(rows_count, cols_count, MAX_BW_IMAGE_VALUE);
+      scan_areas_bw_image = original_image_data->clone();
 
-      for(int row = 0; row < rows_count; ++row) {
-        for(int col = 0; col < cols_count; ++col) {
-          value = image_data->get(row, col);
-          if(value == MIN_BW_IMAGE_VALUE) {
-            scan_areas_bw_image->set(row, col, value);
+      left_eye->set_top(summary.max(eyes_row - bandwidth, 0));
+      left_eye->set_bottom(summary.min(eyes_row + bandwidth, rows_count - 1));
+      left_eye->set_left(eyes_border_offset);
+      left_eye->set_right((cols_count / 2) - eyes_central_offset);
+      scan_areas_bw_image->render_rectangle(left_eye, MID_BW_IMAGE_VALUE);
+
+      right_eye->set_top(left_eye->get_top());
+      right_eye->set_bottom(left_eye->get_bottom());
+      right_eye->set_left((cols_count / 2) + eyes_central_offset);
+      right_eye->set_right(cols_count - eyes_border_offset);
+      scan_areas_bw_image->render_rectangle(right_eye, MID_BW_IMAGE_VALUE);
+
+      mouth->set_top(summary.max(mouth_row - bandwidth, 0));
+      mouth->set_bottom(summary.min(mouth_row + bandwidth, rows_count - 1));
+      mouth->set_left(mouth_border_offset);
+      mouth->set_right(cols_count - mouth_border_offset);
+      scan_areas_bw_image->render_rectangle(mouth, MID_BW_IMAGE_VALUE);
+
+      int horiz_left_eye_cg = _get_horiz_cg(bw_image_data, left_eye);
+      int horiz_right_eye_cg = _get_horiz_cg(bw_image_data, right_eye);
+      int horiz_mouth_cg = _get_horiz_cg(bw_image_data, mouth);
+
+      left_eye->set_top(summary.max(eyes_row - bandwidth / 1.5, 0));
+      left_eye->set_bottom(summary.min(eyes_row + bandwidth / 1.5, rows_count - 1));
+      left_eye->set_left(horiz_left_eye_cg - cg_eyes_offset);
+      left_eye->set_right(horiz_left_eye_cg + cg_eyes_offset);
+      scan_areas_bw_image->render_rectangle(left_eye, MID_BW_IMAGE_VALUE);
+
+      right_eye->set_top(summary.max(eyes_row - bandwidth / 1.5, 0));
+      right_eye->set_bottom(summary.min(eyes_row + bandwidth / 1.5, rows_count - 1));
+      right_eye->set_left(horiz_right_eye_cg - cg_eyes_offset);
+      right_eye->set_right(horiz_right_eye_cg + cg_eyes_offset);
+      scan_areas_bw_image->render_rectangle(right_eye, MID_BW_IMAGE_VALUE);
+
+      mouth->set_top(summary.max(mouth_row - bandwidth / 1.5, 0));
+      mouth->set_bottom(summary.min(mouth_row + bandwidth / 1.5, rows_count - 1));
+      mouth->set_left(horiz_mouth_cg - cg_mouth_offset);
+      mouth->set_right(horiz_mouth_cg + cg_mouth_offset);
+      scan_areas_bw_image->render_rectangle(mouth, MID_BW_IMAGE_VALUE);
+
+      return make_tuple(scan_areas_bw_image, left_eye, right_eye, mouth);
+    }
+
+    int _get_horiz_cg(MATRIX bw_image_data, RECTANGLE rectangle) {
+      int cg_x_acum = 0;
+      int points_counter = 0;
+      for(int row = rectangle->get_top(); row < rectangle->get_bottom(); ++row) {
+        for(int col = rectangle->get_left(); col < rectangle->get_right(); ++col) {
+          if(bw_image_data->get(row, col) == MIN_BW_IMAGE_VALUE) {
+            cg_x_acum += col;
+            points_counter++;
           }
         }
       }
 
-      _left_eye->set_top(summary.max(eyes_row - bandwidth, 0));
-      _left_eye->set_bottom(summary.min(eyes_row + bandwidth, rows_count - 1));
-      _left_eye->set_left(eyes_border_offset);
-      _left_eye->set_right((cols_count / 2) - eyes_central_offset);
-      scan_areas_bw_image->render_rectangle(_left_eye, MID_BW_IMAGE_VALUE);
 
-      _right_eye->set_top(_left_eye->get_top());
-      _right_eye->set_bottom(_left_eye->get_bottom());
-      _right_eye->set_left((cols_count / 2) + eyes_central_offset);
-      _right_eye->set_right(cols_count - eyes_border_offset);
-      scan_areas_bw_image->render_rectangle(_right_eye, MID_BW_IMAGE_VALUE);
-
-      _mouth->set_top(summary.max(mouth_row - bandwidth, 0));
-      _mouth->set_bottom(summary.min(mouth_row + bandwidth, rows_count - 1));
-      _mouth->set_left(mouth_border_offset);
-      _mouth->set_right(cols_count - mouth_border_offset);
-      scan_areas_bw_image->render_rectangle(_mouth, MID_BW_IMAGE_VALUE);
-
-      return make_tuple(scan_areas_bw_image, _left_eye, _right_eye, _mouth);
+      return (int)((float)cg_x_acum / (float)points_counter);
     }
 
     void _preprocess(int person_id, int posse_id) {
@@ -177,12 +208,12 @@ class TestXL5FastFaceRecognition {
       int mouth_row = get<2>(horiz_hist_result);
       // image.save_pgm_gray(string("horiz_hist_") + dest_file, horizontal_bw_histogram_peaks, "XL5 horiz hist B W image");
 
-      auto get_scan_areas_result = _get_scan_areas(horizontal_bw_histogram_peaks, eyes_row, mouth_row);
+      auto get_scan_areas_result = _get_scan_areas(image_data, gradients_b_w, eyes_row, mouth_row);
       MATRIX scan_areas_bw = get<0>(get_scan_areas_result);
       RECTANGLE left_eye_area = get<1>(get_scan_areas_result);
       RECTANGLE right_eye_area = get<2>(get_scan_areas_result);
       RECTANGLE mouth_area = get<3>(get_scan_areas_result);
-      // image.save_pgm_gray(string("scan_areas_") + dest_file, scan_areas_bw, "XL5 scan areas B W image");
+      image.save_pgm_gray(string("scan_areas_") + dest_file, scan_areas_bw, "XL5 scan areas B W image");
 
       // delete buffers
       delete image_data;

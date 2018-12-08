@@ -13,6 +13,7 @@ class XL5ImagePatterns {
     void load_paterns(const string& patterns_path) {
       XL5File file;
       _patterns_buffer = new XL5Stack<XL5Matrix<uint8_t>*>();
+      _patterns_buffer->create(1000, 100);
       XL5Stack<string>* files = file.list_dir(patterns_path);
       for(int i = 0; i < files->size(); ++i) {
         XL5Image* pattern = new XL5Image();
@@ -21,7 +22,8 @@ class XL5ImagePatterns {
         XL5Matrix<uint8_t>* pattern_data = pattern->get_gray_channel_data();
         _patterns_buffer->push(pattern_data);
       }
-      _patterns_buffer->log("Patterns pointers:", XL5Color::FG_GREEN);
+      // _patterns_buffer->log("Patterns pointers:", XL5Color::FG_GREEN);
+      files->drop();
       delete files;
     }
 

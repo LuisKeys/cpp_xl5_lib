@@ -5,7 +5,7 @@
 #include <sstream>
 #include "XL5Matrix.h"
 
-#define VERBOSE 1
+#define VERBOSE 0
 
 using namespace std;
 // Images object and its related basic operations
@@ -24,6 +24,7 @@ class XL5Image {
 
       ifstream image_file(image_path, ifstream::in);
       string input_line = "";
+      string input_line2 = "";
       string width_str = "";
       string height_str = "";
 
@@ -31,8 +32,16 @@ class XL5Image {
       getline(image_file, input_line);
       if(VERBOSE == 1)
         cout << "Version : " << input_line << endl;
+      if(input_line == "P2") {
+        _type = 2;
+
+        if(VERBOSE == 1)
+          cout << "Portable GrayMap - ASCII" << endl;
+      }
+
       if(input_line == "P5") {
         _type = 5;
+
         if(VERBOSE == 1)
           cout << "Portable GrayMap - Binary" << endl;
       }
@@ -42,12 +51,11 @@ class XL5Image {
       if(input_line.find("#") == 0) {
         // Comment found
         _comment = input_line;
-        // Third line : size
-        getline(image_file, input_line, ' ');
-        _width = stoi(input_line);
 
-        getline(image_file, input_line);
-        _height = stoi(input_line);
+        // Third line : size
+        image_file >> input_line >> input_line2;
+        _width = stoi(input_line);
+        _height = stoi(input_line2);
       }
       else {
         int found_index = input_line.find(" ");
@@ -58,7 +66,7 @@ class XL5Image {
       }
 
       // Third line : maximum value
-      getline(image_file, input_line);
+      image_file >> input_line;
       _maximum_value = stoi(input_line);
 
       if(VERBOSE == 1) {
@@ -68,7 +76,7 @@ class XL5Image {
         cout << "Maximum_value:" << _maximum_value << endl;
       }
 
-      if(_type == 5) {
+      if(_type == 2) {
         _gray_channel = new XL5Matrix<uint8_t>();
         _gray_channel->create(_height, _width, 0);
         char byte_buffer = 0;
@@ -76,14 +84,16 @@ class XL5Image {
         for(int row = 0; row < _height; ++row) {
           for(int col = 0; col < _width; ++col) {
             image_file.read(&byte_buffer, 1);
-            float_buffer = (float)byte_buffer;
+            int value;
+            image_file >> value;
+            float_buffer = (float)value;
             float_buffer *= 255.0 / _maximum_value;
             _gray_channel->set(row, col, (uint8_t)float_buffer);
           }
         }
       }
 
-      if(_type == 2) {
+      if(_type == 5) {
         _gray_channel = new XL5Matrix<uint8_t>();
         _gray_channel->create(_height, _width, 0);
         char byte_buffer = 0;
@@ -105,6 +115,9 @@ class XL5Image {
     void save_pgm_gray(const string& image_path, XL5Matrix<uint8_t>* data, string comment) {
       ofstream image_file;
       int count_per_line = 0;
+
+      _width = data->cols_count();
+      _height = data->rows_count();
 
       image_file.open (image_path);
       image_file << "P2 " << endl;

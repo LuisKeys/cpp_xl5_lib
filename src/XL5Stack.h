@@ -35,6 +35,7 @@ class XL5Stack {
 			}
 
 			++_top;
+
 			if(_top == _max_size) return XL5_STACK_ERR_STACK_OVERFLOW;
 
 			return XL5_STACK_OK;

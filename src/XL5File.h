@@ -17,8 +17,9 @@ class XL5File {
       DIR* dir = opendir(patterns_path.c_str());
       while ((dir_ent = readdir(dir)) != NULL) {
         string file = string(dir_ent->d_name);
-        if(file != "." && file != "..")
+        if(file != "." && file != "..") {
           files->push(file);
+        }
       }
       (void)closedir(dir);
 

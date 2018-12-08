@@ -7,6 +7,7 @@
 #include "../XL5ImageFilters.h"
 #include "../XL5ImagePatterns.h"
 #include "../XL5Rectangle.h"
+#include "../XL5Summary.h"
 
 #define MATRIX XL5Matrix<uint8_t> *
 #define RECTANGLE XL5Rectangle<int> *
@@ -104,10 +105,14 @@ class TestXL5FastFaceRecognition {
       RECTANGLE _left_eye = new XL5Rectangle<int>();
       RECTANGLE _right_eye = new XL5Rectangle<int>();
       RECTANGLE _mouth = new XL5Rectangle<int>();
-
       int rows_count = image_data->rows_count();
       int cols_count = image_data->cols_count();
+      int bandwidth = (int)((float)rows_count * 0.1);
+      int eyes_border_offset = (int)((float)cols_count * 0.08);
+      int eyes_central_offset = (int)((float)cols_count * 0.04);
+      int mouth_border_offset = (int)((float)cols_count * 0.15);
       uint8_t value;
+      XL5Summary summary;
 
       scan_areas_bw_image->create(rows_count, cols_count, MAX_BW_IMAGE_VALUE);
 
@@ -119,6 +124,24 @@ class TestXL5FastFaceRecognition {
           }
         }
       }
+
+      _left_eye->set_top(summary.max(eyes_row - bandwidth, 0));
+      _left_eye->set_bottom(summary.min(eyes_row + bandwidth, rows_count - 1));
+      _left_eye->set_left(eyes_border_offset);
+      _left_eye->set_right((cols_count / 2) - eyes_central_offset);
+      scan_areas_bw_image->render_rectangle(_left_eye, MID_BW_IMAGE_VALUE);
+
+      _right_eye->set_top(_left_eye->get_top());
+      _right_eye->set_bottom(_left_eye->get_bottom());
+      _right_eye->set_left((cols_count / 2) + eyes_central_offset);
+      _right_eye->set_right(cols_count - eyes_border_offset);
+      scan_areas_bw_image->render_rectangle(_right_eye, MID_BW_IMAGE_VALUE);
+
+      _mouth->set_top(summary.max(mouth_row - bandwidth, 0));
+      _mouth->set_bottom(summary.min(mouth_row + bandwidth, rows_count - 1));
+      _mouth->set_left(mouth_border_offset);
+      _mouth->set_right(cols_count - mouth_border_offset);
+      scan_areas_bw_image->render_rectangle(_mouth, MID_BW_IMAGE_VALUE);
 
       return make_tuple(scan_areas_bw_image, _left_eye, _right_eye, _mouth);
     }
@@ -134,7 +157,7 @@ class TestXL5FastFaceRecognition {
 
       int type = image.load_pgm(base_path + source_file);
       MATRIX image_data = image.get_gray_channel_data();
-      image.save_pgm_gray(string("image_data_") + dest_file, image_data, "XL5 threholded gradients");
+      // image.save_pgm_gray(string("image_data_") + dest_file, image_data, "XL5 threholded gradients");
 
       MATRIX gradients = image_filters.get_vertical_gradient(image_data);
       // image.save_pgm_gray(string("gradients_") + dest_file, gradients, "XL5 threholded gradients");
@@ -156,9 +179,9 @@ class TestXL5FastFaceRecognition {
 
       auto get_scan_areas_result = _get_scan_areas(horizontal_bw_histogram_peaks, eyes_row, mouth_row);
       MATRIX scan_areas_bw = get<0>(get_scan_areas_result);
-      RECTANGLE left_eye = get<1>(get_scan_areas_result);
-      RECTANGLE right_eye = get<2>(get_scan_areas_result);
-      RECTANGLE _mouth = get<2>(get_scan_areas_result);
+      RECTANGLE left_eye_area = get<1>(get_scan_areas_result);
+      RECTANGLE right_eye_area = get<2>(get_scan_areas_result);
+      RECTANGLE mouth_area = get<3>(get_scan_areas_result);
       // image.save_pgm_gray(string("scan_areas_") + dest_file, scan_areas_bw, "XL5 scan areas B W image");
 
       // delete buffers
@@ -169,6 +192,10 @@ class TestXL5FastFaceRecognition {
       delete gradients_b_w;
       delete horizontal_bw_histogram_peaks;
       delete scan_areas_bw;
+
+      delete left_eye_area;
+      delete right_eye_area;
+      delete mouth_area;
 
     }
 };

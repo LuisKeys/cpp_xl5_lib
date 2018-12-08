@@ -30,6 +30,22 @@ class XL5Rectangle {
       return _bottom;
     }
 
+    void set_left(T left) {
+      _left = left;
+    }
+
+    void set_top(T top) {
+      _top = top;
+    }
+
+    void set_right(T right) {
+      _right = right;
+    }
+
+    void set_bottom(T bottom) {
+      _bottom = bottom;
+    }
+
   private:
     T _left = 0;
     T _top = 0;

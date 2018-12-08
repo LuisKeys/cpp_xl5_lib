@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include "XL5Exceptions.h"
 #include "XL5Log.h"
+#include "XL5Rectangle.h"
 
 // matrix object and related operations
 template<class T>
@@ -346,6 +347,19 @@ class XL5Matrix {
 			delete y;
 
 			return x;
+		}
+
+		// Render a rectangle
+		void render_rectangle(XL5Rectangle<int>* rectangle, T value) {
+			for(int col = rectangle->get_left(); col <= rectangle->get_right(); ++col) {
+				set(rectangle->get_top(), col, value);
+				set(rectangle->get_bottom(), col, value);
+			}
+
+			for(int row = rectangle->get_top(); row <= rectangle->get_bottom(); ++row) {
+				set(row, rectangle->get_left(), value);
+				set(row, rectangle->get_right(), value);
+			}
 		}
 
 		// drop the matrix from memory

@@ -55,3 +55,19 @@ float XL5Summary::sum(float * input, int len) {
 	log.function_end("XL5Summary::sum", XL5Color::FG_BLUE);
   return sum_result;
 }
+
+// Returns min of two values a and b
+float XL5Summary::min(int a, int b) {
+	if(a < b)
+		return a;
+	else
+		return b;
+}
+
+// Returns max of two values a and b
+float XL5Summary::max(int a, int b) {
+	if(a > b)
+		return a;
+	else
+		return b;
+}

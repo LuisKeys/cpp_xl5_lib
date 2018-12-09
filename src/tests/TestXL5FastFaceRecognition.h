@@ -6,11 +6,13 @@
 #include "../XL5Image.h"
 #include "../XL5ImageFilters.h"
 #include "../XL5ImagePatterns.h"
+#include "../XL5Memory.h"
 #include "../XL5Rectangle.h"
 #include "../XL5Summary.h"
 
-#define MATRIX XL5Matrix<uint8_t> *
-#define RECTANGLE XL5Rectangle<int> *
+#define MATRIX XL5Matrix<uint8_t>*
+#define MATRIX_O XL5Matrix<uint8_t>
+#define RECTANGLE XL5Rectangle<int>*
 
 class TestXL5FastFaceRecognition {
   public:
@@ -36,6 +38,8 @@ class TestXL5FastFaceRecognition {
   private:
     tuple<MATRIX, int, int> _get_horizontal_bw_histogram_peaks(MATRIX image_data) {
       MATRIX horizontal_histogram = new XL5Matrix<uint8_t>();
+      // MATRIX horizontal_histogram = XL5Memory<MATRIX_O>.new_object("test");
+      // XL5Memory<MATRIX_O>.log();
       int rows_count = image_data->rows_count();
       int cols_count = image_data->cols_count();
       int row_histogram_value = image_data->cols_count();
@@ -108,7 +112,7 @@ class TestXL5FastFaceRecognition {
       int rows_count = original_image_data->rows_count();
       int cols_count = original_image_data->cols_count();
       int bandwidth = (int)((float)rows_count * 0.1);
-      int eyes_border_offset = (int)((float)cols_count * 0.15);
+      int eyes_border_offset = (int)((float)cols_count * 0.1);
       int eyes_central_offset = (int)((float)cols_count * 0.01);
       int mouth_border_offset = (int)((float)cols_count * 0.15);
       int cg_eyes_offset = (int)((float)cols_count * 0.15);
@@ -158,6 +162,12 @@ class TestXL5FastFaceRecognition {
       mouth->set_right(horiz_mouth_cg + cg_mouth_offset);
       scan_areas_bw_image->render_rectangle(mouth, MID_BW_IMAGE_VALUE);
 
+      left_eye = _find_eye(original_image_data, left_eye);
+      scan_areas_bw_image->render_rectangle(left_eye, MIN_BW_IMAGE_VALUE);
+
+      right_eye = _find_eye(original_image_data, right_eye);
+      scan_areas_bw_image->render_rectangle(right_eye, MIN_BW_IMAGE_VALUE);
+
       return make_tuple(scan_areas_bw_image, left_eye, right_eye, mouth);
     }
 
@@ -175,6 +185,40 @@ class TestXL5FastFaceRecognition {
 
 
       return (int)((float)cg_x_acum / (float)points_counter);
+    }
+
+    RECTANGLE _find_eye(MATRIX original_image_data, RECTANGLE eye_draft) {
+      int rows_count = original_image_data->rows_count();
+      int rectangle_side = (int)((float)rows_count * 0.05);
+      int max_concentration = 0;
+      int concentration = 0;
+      int max_col = 0;
+      int max_row = 0;
+
+      for(int row = eye_draft->get_top(); row < eye_draft->get_bottom() - rectangle_side; ++row) {
+        for(int col = eye_draft->get_left(); col < eye_draft->get_right() - rectangle_side; ++col) {
+          concentration = 0;
+
+          for(int row_inner = row; row_inner < row + rectangle_side; ++row_inner) {
+            for(int col_inner = col; col_inner < col + rectangle_side; ++col_inner) {
+              concentration += MAX_BW_IMAGE_VALUE - original_image_data->get(row_inner, col_inner);
+            }
+          }
+
+          if(max_concentration < concentration) {
+            max_concentration = concentration;
+            max_col = col;
+            max_row = row;
+          }
+        }
+      }
+
+      eye_draft->set_left(max_col);
+      eye_draft->set_top(max_row);
+      eye_draft->set_right(max_col + rectangle_side);
+      eye_draft->set_bottom(max_row + rectangle_side);
+
+      return eye_draft;
     }
 
     void _preprocess(int person_id, int posse_id) {
@@ -213,7 +257,7 @@ class TestXL5FastFaceRecognition {
       RECTANGLE left_eye_area = get<1>(get_scan_areas_result);
       RECTANGLE right_eye_area = get<2>(get_scan_areas_result);
       RECTANGLE mouth_area = get<3>(get_scan_areas_result);
-      image.save_pgm_gray(string("scan_areas_") + dest_file, scan_areas_bw, "XL5 scan areas B W image");
+      // image.save_pgm_gray(string("scan_areas_") + dest_file, scan_areas_bw, "XL5 scan areas B W image");
 
       // delete buffers
       delete image_data;

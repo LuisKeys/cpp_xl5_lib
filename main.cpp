@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include "src/XL5Test.h"
+#include "src/XL5Memory.h"
 
 int main(int argc, char** argv)
 {
@@ -10,5 +11,6 @@ int main(int argc, char** argv)
   // Executes unit tests
   test.test(verbose);
 
+  XL5Memory::log();
   return 0;
 }

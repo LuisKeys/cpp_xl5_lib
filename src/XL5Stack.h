@@ -1,6 +1,7 @@
 #pragma once
 
 #include "XL5Log.h"
+#include "XL5Memory.h"
 
 #define XL5_STACK_OK 0
 #define XL5_STACK_ERR_STACK_OVERFLOW 1
@@ -16,6 +17,7 @@ class XL5Stack {
 
 		// create a stack object
 		void create(int max_size, int grow_size) {
+			XL5Memory::new_object();
 			_stack_elements = (T*)malloc((_alloc_space) * sizeof(T));
 			_max_size = max_size;
 			_grow_size = grow_size;
@@ -97,13 +99,16 @@ class XL5Stack {
 
 		// clear the stack
 		void clear() {
-			 free(_stack_elements);
+			XL5Memory::delete_object();
+		 	free(_stack_elements);
+			XL5Memory::new_object();
 			_stack_elements = (T*)malloc(sizeof(T));
 			_top = 0;
 		}
 
 		// drop the stack from memory
 		void drop() {
+			XL5Memory::delete_object();
 			free(_stack_elements);
 		}
 

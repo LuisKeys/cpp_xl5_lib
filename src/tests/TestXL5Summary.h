@@ -11,6 +11,7 @@ class TestXL5Summary {
 		 	XL5Summary summary;
 
 			int num_elements = 1000;
+			XL5Memory::new_object();
 			float* numbers = new float[num_elements];
 
 			for(int i = num_elements; i >= 0; --i) numbers[num_elements - i - 1] = i;

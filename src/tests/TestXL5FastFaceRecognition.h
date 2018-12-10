@@ -27,7 +27,7 @@ class TestXL5FastFaceRecognition {
       for(int person_id = 1; person_id < 6; ++person_id) {
         if(person_id != 2 && person_id != 4 && person_id != 6) {
           for(int posse_id = 1; posse_id < 11; ++posse_id) {
-          _preprocess(person_id, posse_id);
+          // _preprocess(person_id, posse_id);
           }
         }
       }
@@ -37,18 +37,23 @@ class TestXL5FastFaceRecognition {
 
   private:
     tuple<MATRIX, int, int> _get_horizontal_bw_histogram_peaks(MATRIX image_data) {
+      XL5Memory::new_object();
+      XL5Memory::new_object();
       MATRIX horizontal_histogram = new XL5Matrix<uint8_t>();
-      // MATRIX horizontal_histogram = XL5Memory<MATRIX_O>.new_object("test");
-      // XL5Memory<MATRIX_O>.log();
+
       int rows_count = image_data->rows_count();
       int cols_count = image_data->cols_count();
       int row_histogram_value = image_data->cols_count();
       uint8_t value;
       int max = 0;
       int max_row = 0;
+
+      XL5Memory::new_object();
       int* histograms = new int[rows_count];
       int eyes_row = 0;
       int mouth_row = 0;
+
+      XL5Memory::new_object();
       int* offsets = new int[2];
       int bandwidth = (int)((float)rows_count * 0.25);
       offsets[0] = (int)((float)rows_count * 0.35);
@@ -100,15 +105,24 @@ class TestXL5FastFaceRecognition {
         }
       }
 
+      XL5Memory::delete_object();
       delete histograms;
       return make_tuple(horizontal_histogram, eyes_row, mouth_row);;
     }
 
     tuple<MATRIX, RECTANGLE, RECTANGLE, RECTANGLE> _get_scan_areas(MATRIX original_image_data, MATRIX bw_image_data, int eyes_row, int mouth_row) {
+      XL5Memory::new_object();
       MATRIX scan_areas_bw_image = new XL5Matrix<uint8_t>();
+
+      XL5Memory::new_object();
       RECTANGLE left_eye = new XL5Rectangle<int>();
+
+      XL5Memory::new_object();
       RECTANGLE right_eye = new XL5Rectangle<int>();
+
+      XL5Memory::new_object();
       RECTANGLE mouth = new XL5Rectangle<int>();
+
       int rows_count = original_image_data->rows_count();
       int cols_count = original_image_data->cols_count();
       int bandwidth = (int)((float)rows_count * 0.1);
@@ -260,16 +274,34 @@ class TestXL5FastFaceRecognition {
       // image.save_pgm_gray(string("scan_areas_") + dest_file, scan_areas_bw, "XL5 scan areas B W image");
 
       // delete buffers
+      XL5Memory::delete_object();
       delete image_data;
+
+      XL5Memory::delete_object();
       delete gradients;
+
+      XL5Memory::delete_object();
       delete gradients_all_black;
+
+      XL5Memory::delete_object();
       delete gradients_b_g;
+
+      XL5Memory::delete_object();
       delete gradients_b_w;
+
+      XL5Memory::delete_object();
       delete horizontal_bw_histogram_peaks;
+
+      XL5Memory::delete_object();
       delete scan_areas_bw;
 
+      XL5Memory::delete_object();
       delete left_eye_area;
+
+      XL5Memory::delete_object();
       delete right_eye_area;
+
+      XL5Memory::delete_object();
       delete mouth_area;
 
     }

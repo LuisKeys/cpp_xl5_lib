@@ -15,14 +15,23 @@ class TestXL5Graph {
 
       graph.create(1000, 100);
 
+      XL5Memory::new_object();
       XL5GraphNode* node_1 = new XL5GraphNode(1, 0);
       graph.add_base_node(node_1);
+
+      XL5Memory::new_object();
       XL5GraphNode* node_2 = new XL5GraphNode(2, 1);
       graph.add_base_node(node_2);
+
+      XL5Memory::new_object();
       XL5GraphNode* node_3 = new XL5GraphNode(5, 0);
       graph.add_base_node(node_3);
+
+      XL5Memory::new_object();
       XL5GraphNode* node_4 = new XL5GraphNode(4, 1);
       graph.add_base_node(node_4);
+
+      XL5Memory::new_object();
       XL5GraphNode* node_5 = new XL5GraphNode(3, 2);
       graph.add_base_node(node_5);
 

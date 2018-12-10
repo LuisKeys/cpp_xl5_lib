@@ -10,7 +10,9 @@ class TestXL5Stack {
 		 	XL5Log log;
 		 	XL5Stack<float> stack;
 			int len = 4;
+			XL5Memory::new_object();
 		 	float* popped_numbers = new float(len);
+			XL5Memory::new_object();
 		 	float* numbers = new float(len);
 
 		 	numbers[0] = 10;

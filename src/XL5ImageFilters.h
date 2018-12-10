@@ -25,6 +25,7 @@ class XL5ImageFilters {
     }
 
     XL5Matrix<uint8_t> * get_threhold(XL5Matrix<uint8_t> * image_data, int threhold) {
+      XL5Memory::new_object();
       XL5Matrix<uint8_t> * threholded_gradients = new XL5Matrix<uint8_t>();
       int rows_count = image_data->rows_count();
       int cols_count = image_data->cols_count();
@@ -47,6 +48,7 @@ class XL5ImageFilters {
     }
 
     XL5Matrix<uint8_t> * get_horizontal_gradient(XL5Matrix<uint8_t> * image_data) {
+      XL5Memory::new_object();
       XL5Matrix<uint8_t> * horiz_gradients = new XL5Matrix<uint8_t>();
       int rows_count = image_data->rows_count();
       int cols_count = image_data->cols_count();
@@ -79,6 +81,7 @@ class XL5ImageFilters {
     }
 
     XL5Matrix<uint8_t> * get_vertical_gradient(XL5Matrix<uint8_t> * image_data) {
+      XL5Memory::new_object();
       XL5Matrix<uint8_t> * vertical_gradients = new XL5Matrix<uint8_t>();
       int rows_count = image_data->rows_count();
       int cols_count = image_data->cols_count();
@@ -111,6 +114,7 @@ class XL5ImageFilters {
     }
   private:
     XL5Matrix<uint8_t> * _get_color_jump(XL5Matrix<uint8_t> * image_data, int threhold, int is_increase) {
+      XL5Memory::new_object();
       XL5Matrix<uint8_t> * threholded_image = new XL5Matrix<uint8_t>();
       int rows_count = image_data->rows_count();
       int cols_count = image_data->cols_count();

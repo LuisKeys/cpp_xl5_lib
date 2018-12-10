@@ -9,6 +9,7 @@ class TestXL5Queue {
 		void test(int verbose) {
 		 	XL5Log XL5Log;
 		 	XL5Queue<float> stack;
+			XL5Memory::new_object();
 		 	float* dequeued_numbers = new float[4];
 
 		 	stack.create(10);

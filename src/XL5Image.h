@@ -77,6 +77,7 @@ class XL5Image {
       }
 
       if(_type == 2) {
+        XL5Memory::new_object();
         _gray_channel = new XL5Matrix<uint8_t>();
         _gray_channel->create(_height, _width, 0);
         char byte_buffer = 0;
@@ -94,6 +95,7 @@ class XL5Image {
       }
 
       if(_type == 5) {
+        XL5Memory::new_object();
         _gray_channel = new XL5Matrix<uint8_t>();
         _gray_channel->create(_height, _width, 0);
         char byte_buffer = 0;

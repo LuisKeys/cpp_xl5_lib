@@ -4,12 +4,14 @@
 #include "XL5Stack.h"
 #include "XL5Log.h"
 #include "XL5GraphNode.h"
+#include "XL5Memory.h"
 
 // Graph object and its related operations
 class XL5Graph {
   public:
     // Initialize graph object
     void create(int max_nodes_num, int grow_size) {
+      XL5Memory::new_object();
       _root_stack = new XL5Stack<XL5Stack<XL5GraphNode*>*>();
       _root_stack->create(max_nodes_num, grow_size);
       _max_nodes_num = max_nodes_num;
@@ -18,6 +20,7 @@ class XL5Graph {
 
     // Add base node
     void add_base_node(XL5GraphNode* node) {
+      XL5Memory::new_object();
       XL5Stack<XL5GraphNode*>* node_root_stack = new XL5Stack<XL5GraphNode*>();
       node_root_stack->create(_max_nodes_num, _grow_size);
       node_root_stack->push(node);
@@ -32,6 +35,7 @@ class XL5Graph {
         XL5Stack<XL5GraphNode*>* child_root_stack = _root_stack->get(i);
         XL5GraphNode* iter_base_node = child_root_stack->get(0);
         if(iter_base_node->get_node_id() == base_node->get_node_id()) {
+          XL5Memory::delete_object();
           child_root_stack->push(linked_node);
         }
       }
@@ -44,9 +48,11 @@ class XL5Graph {
       for(int i = 0; i < n; ++i) {
         XL5Stack<XL5GraphNode*>* child_root_stack = _root_stack->get(i);
         child_root_stack->clear();
+        XL5Memory::delete_object();
         delete child_root_stack;
       }
 
+      XL5Memory::delete_object();
       delete _root_stack;
     }
 

@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include "XL5Exceptions.h"
 #include "XL5Log.h"
+#include "XL5Memory.h"
 #include "XL5Rectangle.h"
 
 // matrix object and related operations
@@ -13,6 +14,7 @@ class XL5Matrix {
 	public:
 		// create a matrix object with given rows and cols
 		void create(int rows_count, int cols_count, T constant) {
+			XL5Memory::new_object();
 			_matrix_elements = (T*)malloc(sizeof(T) * rows_count * cols_count);
 			_rows_count = rows_count;
 			_cols_count = cols_count;
@@ -82,6 +84,7 @@ class XL5Matrix {
 			int t_cols_count = _rows_count;
 			int t_rows_count = _cols_count;
 
+			XL5Memory::new_object();
 			T* t_matrix_elements = (T*)malloc(sizeof(T) * _rows_count * _cols_count);
 			for(int row = 0; row < _rows_count; ++row) {
 				for(int col = 0; col < _cols_count; ++col) {
@@ -105,6 +108,7 @@ class XL5Matrix {
 			int c_rows_count = _rows_count;
 			int c_cols_count = B->cols_count();
 
+			XL5Memory::new_object();
 			XL5Matrix<T>* C = new XL5Matrix<T>();
 
 			C->create(c_rows_count, c_cols_count, 0);
@@ -143,6 +147,7 @@ class XL5Matrix {
 			int c_rows_count = _rows_count;
 			int c_cols_count = _cols_count;
 
+			XL5Memory::new_object();
 			XL5Matrix<T>* C = new XL5Matrix<T>();
 
 			C->create(c_rows_count, c_cols_count);
@@ -162,13 +167,16 @@ class XL5Matrix {
 		XL5Matrix<T> * invert() {
 			int n = _rows_count;
 
+			XL5Memory::new_object();
 			XL5Matrix * Ainv = new XL5Matrix();
 			Ainv->create(n, n, 0);
 
+			XL5Memory::new_object();
 			XL5Matrix * I = new XL5Matrix();
 			I->create(n, n, 0);
 			I->init_unit();
 
+			XL5Memory::new_object();
 			T* i = new T[n];
 
 			for(int col = 0; col < n; ++col) {
@@ -190,12 +198,16 @@ class XL5Matrix {
 				L->drop();
 				U->drop();
 
+				XL5Memory::delete_object();
 				delete L;
+				XL5Memory::delete_object();
 				delete U;
+				XL5Memory::delete_object();
 				delete pi;
 			}
 
 			I->drop();
+			XL5Memory::delete_object();
 			delete I;
 
 			return Ainv;
@@ -203,6 +215,7 @@ class XL5Matrix {
 
 		// multiply 2 matrices entry wise (Hadamard) AxB = C (Current is A and provided is B, and return a pointer to C)
 		XL5Matrix<T> * clone() {
+			XL5Memory::new_object();
 			XL5Matrix<T> * Ac = new XL5Matrix<T>();
 			Ac->create(_rows_count, _cols_count, 0);
 			for(int row = 0; row < _rows_count; ++row) {
@@ -217,8 +230,11 @@ class XL5Matrix {
 		// LU decomposition returns a tuple with <L, U> matrices
 		tuple<XL5Matrix<T> *, XL5Matrix<T> *> lu_decomposition() {
 			int n = _rows_count;
+			XL5Memory::new_object();
 			XL5Matrix<T> * L = new XL5Matrix<T>();
+			XL5Memory::new_object();
 			XL5Matrix<T> * U = new XL5Matrix<T>();
+			XL5Memory::new_object();
 			XL5Matrix<T> * Ac = new XL5Matrix<T>();
 			L->create(n, n);
 			U->create(n, n);
@@ -243,6 +259,7 @@ class XL5Matrix {
 			}
 
 			Ac->drop();
+			XL5Memory::delete_object();
 			delete Ac;
 
 			return  make_tuple(L, U);
@@ -251,7 +268,9 @@ class XL5Matrix {
 		// LUP decomposition returns a tuple with <L, U> matrices and pi vector
 		tuple<int *, XL5Matrix<T> *, XL5Matrix<T> *> lup_decomposition() {
 			int n = _rows_count;
+			XL5Memory::new_object();
 			XL5Matrix<T> * L = new XL5Matrix<T>();
+			XL5Memory::new_object();
 			XL5Matrix<T> * U = new XL5Matrix<T>();
 			L->create(n, n, 0);
 			U->create(n, n, 0);
@@ -318,6 +337,7 @@ class XL5Matrix {
 			}
 
 			Ac->drop();
+			XL5Memory::delete_object();
 			delete Ac;
 
 			return  make_tuple(pi, L, U);
@@ -344,6 +364,7 @@ class XL5Matrix {
 				x[i] = (y[i] - sum_u_x) / U->get(i, i);
 			}
 
+			XL5Memory::delete_object();
 			delete y;
 
 			return x;
@@ -364,6 +385,7 @@ class XL5Matrix {
 
 		// drop the matrix from memory
 		void drop() {
+			XL5Memory::delete_object();
 			free(_matrix_elements);
 			_rows_count = 0;
 			_cols_count = 0;

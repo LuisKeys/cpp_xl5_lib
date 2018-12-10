@@ -3,6 +3,8 @@
 #include <iostream>
 #include "../XL5Log.h"
 #include "../XL5Matrix.h"
+#include "../XL5Memory.h"
+
 
 class TestXL5Matrix {
 	public:
@@ -68,6 +70,7 @@ class TestXL5Matrix {
 				}
 
 				// Test LUP solve
+				XL5Memory::new_object();
 				double* b = new double[3];
 
 				b[0] = 3;
@@ -84,9 +87,16 @@ class TestXL5Matrix {
 				L->drop();
 				U->drop();
 
+				XL5Memory::delete_object();
 				delete L;
+
+				XL5Memory::delete_object();
 				delete U;
+
+				XL5Memory::delete_object();
 				delete pi;
+
+				XL5Memory::delete_object();
 				delete b;
 
 				// test invert opp
@@ -105,7 +115,9 @@ class TestXL5Matrix {
 
 				Ainv->drop();
 				I->drop();
+				XL5Memory::delete_object();
 				delete Ainv;
+				XL5Memory::delete_object();
 				delete I;
 
 				// A.traspose();

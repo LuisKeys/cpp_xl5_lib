@@ -11,6 +11,7 @@ class TestXL5Sort {
 		 	XL5Sort sort;
 
 			int num_elements = 10;
+			XL5Memory::new_object();
 			float* numbers = new float[num_elements];
 
 			for(int i = num_elements; i >= 0; --i) numbers[num_elements - i - 1] = i;

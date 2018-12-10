@@ -2,6 +2,7 @@
 #include <limits>
 #include "XL5Sort.h"
 #include "XL5Log.h"
+#include "XL5Memory.h"
 
 float * _input;
 
@@ -13,7 +14,9 @@ void merge_results(int left_index, int middle_index, int right_index) {
 	int left_n = middle_index - left_index + 1;
 	int right_n = right_index - middle_index;
 
+	XL5Memory::new_object();
 	float* left = new float[left_n + 1];
+	XL5Memory::new_object();
 	float* right = new float[right_n + 1];
 
 	for(int i = 0; i < left_n; ++i)
@@ -37,7 +40,9 @@ void merge_results(int left_index, int middle_index, int right_index) {
 			j++;
 		}
 	}
+	XL5Memory::delete_object();
 	delete left;
+	XL5Memory::delete_object();
 	delete right;
 }
 

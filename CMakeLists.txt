@@ -7,7 +7,7 @@ add_definitions(-std=c++11)
 set(CXX_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 
-set(sources main.cpp src/XL5Log src/XL5Sort src/XL5Summary src/XL5Test)
+set(sources main.cpp src/XL5Log src/XL5Memory src/XL5Sort src/XL5Summary src/XL5Test)
 
 find_package(OpenMP)
 if (OPENMP_FOUND)

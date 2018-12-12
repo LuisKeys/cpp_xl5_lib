@@ -84,7 +84,6 @@ class XL5Matrix {
 			int t_cols_count = _rows_count;
 			int t_rows_count = _cols_count;
 
-			XL5Memory::new_object();
 			T* t_matrix_elements = (T*)malloc(sizeof(T) * _rows_count * _cols_count);
 			for(int row = 0; row < _rows_count; ++row) {
 				for(int col = 0; col < _cols_count; ++col) {
@@ -94,6 +93,7 @@ class XL5Matrix {
 
 			void drop();
 
+			XL5Memory::new_object();
 			_matrix_elements = t_matrix_elements;
 
 			_cols_count = t_cols_count;
@@ -385,6 +385,7 @@ class XL5Matrix {
 
 		// drop the matrix from memory
 		void drop() {
+			XL5Memory::delete_object();
 			XL5Memory::delete_object();
 			free(_matrix_elements);
 			_rows_count = 0;

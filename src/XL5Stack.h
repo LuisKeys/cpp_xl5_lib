@@ -112,6 +112,14 @@ class XL5Stack {
 			free(_stack_elements);
 		}
 
+		// drop the stack from memory and delete memory counters
+		void drop_delete() {
+			for(int i = 0; i < size(); ++i) {
+				XL5Memory::delete_object();
+			}
+
+			free(_stack_elements);
+		}
 		// Print stack content for debug purposes
 		// Thie method only prints int or float values
 		void print() {

@@ -18,19 +18,8 @@ class XL5Memory {
 
     static void delete_object() {
       int* counter_p = get_count();
-      *counter_p = *counter_p - 1;
-    }
-
-    static void new_object(string description) {
-      int* counter_p = get_count();
-      *counter_p = *counter_p + 1;
-      std::cout << description << *counter_p << '\n';
-    }
-
-    static void delete_object(string description) {
-      int* counter_p = get_count();
-      *counter_p = *counter_p - 1;
-      std::cout << description << *counter_p << '\n';
+      if(*counter_p > 0)
+        *counter_p = *counter_p - 1;
     }
 
     static void log() {

@@ -25,13 +25,19 @@ class XL5ImagePatterns {
         _patterns_buffer->push(pattern_data);
       }
       // _patterns_buffer->log("Patterns pointers:", XL5Color::FG_GREEN);
-      files->drop();
+      files->drop_delete();
       XL5Memory::delete_object();
       delete files;
     }
 
     void drop_patterns() {
+      for(int i = 0; i < _patterns_buffer->size(); ++i) {
+         XL5Matrix<uint8_t>* pattern_data = _patterns_buffer->get(i);
+         pattern_data->drop();
+      }
+
       _patterns_buffer->drop();
+      XL5Memory::delete_object();
       XL5Memory::delete_object();
       delete _patterns_buffer;
     }

@@ -35,7 +35,6 @@ class XL5Graph {
         XL5Stack<XL5GraphNode*>* child_root_stack = _root_stack->get(i);
         XL5GraphNode* iter_base_node = child_root_stack->get(0);
         if(iter_base_node->get_node_id() == base_node->get_node_id()) {
-          XL5Memory::delete_object();
           child_root_stack->push(linked_node);
         }
       }

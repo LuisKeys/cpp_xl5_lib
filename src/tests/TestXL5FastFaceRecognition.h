@@ -27,7 +27,7 @@ class TestXL5FastFaceRecognition {
       for(int person_id = 1; person_id < 6; ++person_id) {
         if(person_id != 2 && person_id != 4 && person_id != 6) {
           for(int posse_id = 1; posse_id < 11; ++posse_id) {
-          // _preprocess(person_id, posse_id);
+          _preprocess(person_id, posse_id);
           }
         }
       }
@@ -37,7 +37,6 @@ class TestXL5FastFaceRecognition {
 
   private:
     tuple<MATRIX, int, int> _get_horizontal_bw_histogram_peaks(MATRIX image_data) {
-      XL5Memory::new_object();
       XL5Memory::new_object();
       MATRIX horizontal_histogram = new XL5Matrix<uint8_t>();
 
@@ -275,24 +274,31 @@ class TestXL5FastFaceRecognition {
 
       // delete buffers
       XL5Memory::delete_object();
+      image_data->drop();
       delete image_data;
 
       XL5Memory::delete_object();
+      gradients->drop();
       delete gradients;
 
       XL5Memory::delete_object();
+      gradients_all_black->drop();
       delete gradients_all_black;
 
       XL5Memory::delete_object();
+      gradients_b_g->drop();
       delete gradients_b_g;
 
       XL5Memory::delete_object();
+      gradients_b_w->drop();
       delete gradients_b_w;
 
       XL5Memory::delete_object();
+      horizontal_bw_histogram_peaks->drop();
       delete horizontal_bw_histogram_peaks;
 
       XL5Memory::delete_object();
+      scan_areas_bw->drop();
       delete scan_areas_bw;
 
       XL5Memory::delete_object();

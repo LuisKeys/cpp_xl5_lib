@@ -2,11 +2,13 @@
 
 #include <iostream>
 #include <tuple>
-#include "../XL5Log.h"
 #include "../XL5Image.h"
 #include "../XL5ImageFilters.h"
 #include "../XL5ImagePatterns.h"
+#include "../XL5Log.h"
+#include "../XL5MLLogisticRegression.h"
 #include "../XL5Memory.h"
+#include "../XL5Random.h"
 #include "../XL5Rectangle.h"
 #include "../XL5Summary.h"
 
@@ -21,21 +23,33 @@ class TestXL5FastFaceRecognition {
       XL5ImagePatterns image_patterns;
       log.function_start("Start faces recognition training", XL5Color::FG_BLUE);
 
-      image_patterns.load_paterns("./data/eyes/");
-      image_patterns.drop_patterns();
+      // Train mouthes recognition LR
+      _traing_mouth_lr();
 
-      for(int person_id = 1; person_id < 6; ++person_id) {
-        if(person_id != 2 && person_id != 4 && person_id != 6) {
-          for(int posse_id = 1; posse_id < 11; ++posse_id) {
-          _preprocess(person_id, posse_id);
-          }
-        }
-      }
+      // Generate faces DB
+      _generate_faces_db();
 
       log.function_end("End faces recognition training", XL5Color::FG_BLUE);
     }
 
   private:
+
+    void _traing_mouth_lr() {
+      XL5MLLogisticRegression<float> lr;
+      lr.create(100);
+      lr.drop();
+    }
+
+    void _generate_faces_db() {
+      for(int person_id = 1; person_id < 6; ++person_id) {
+        if(person_id != 2 && person_id != 4 && person_id != 6) {
+          for(int posse_id = 1; posse_id < 11; ++posse_id) {
+          _preprocess_face(person_id, posse_id);
+          }
+        }
+      }
+    }
+
     tuple<MATRIX, int, int> _get_horizontal_bw_histogram_peaks(MATRIX image_data) {
       XL5Memory::new_object();
       MATRIX horizontal_histogram = new XL5Matrix<uint8_t>();
@@ -234,7 +248,7 @@ class TestXL5FastFaceRecognition {
       return eye_draft;
     }
 
-    void _preprocess(int person_id, int posse_id) {
+    void _preprocess_face(int person_id, int posse_id) {
       XL5Image image;
       XL5ImageFilters image_filters;
       string person_index = to_string(person_id);

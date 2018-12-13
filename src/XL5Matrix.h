@@ -6,6 +6,7 @@
 #include "XL5Exceptions.h"
 #include "XL5Log.h"
 #include "XL5Memory.h"
+#include "XL5Random.h"
 #include "XL5Rectangle.h"
 
 // matrix object and related operations
@@ -22,6 +23,22 @@ class XL5Matrix {
 				_matrix_elements[i] = constant;
 		}
 
+		// create a random matrix
+		void create_random(int rows_count, int cols_count, T min, T max) {
+			srand((unsigned)time(0));
+
+			XL5Memory::new_object();
+			_matrix_elements = (T*)malloc(sizeof(T) * rows_count * cols_count);
+			_rows_count = rows_count;
+			_cols_count = cols_count;
+
+			XL5Random<T> random;
+      random.init();
+
+			for(int i = 0; i < _rows_count * _cols_count; ++i)
+				_matrix_elements[i] = random.get_value(min, max);;
+		}
+
 		// initialize the matrix with a constant value
 		void init_constant(T value) {
 			for(int row = 0; row < _rows_count; ++row) {
@@ -30,6 +47,7 @@ class XL5Matrix {
 				}
 			}
 		}
+
 
 		// initialize a unit matrix
 		void init_unit() {
@@ -43,18 +61,6 @@ class XL5Matrix {
 						_matrix_elements[get_index(row, col)] = 1;
 					else
 					_matrix_elements[get_index(row, col)] = 0;
-				}
-			}
-		}
-
-		// initialize a random matrix
-		void init_random(T min, T max) {
-			srand((unsigned)time(0));
-
-			for(int row = 0; row < _rows_count; ++row) {
-				for(int col = 0; col < _cols_count; ++col) {\
-						T i = (T)((int)((T)rand()) % (int)((T)max)) + (T)min;
-						_matrix_elements[get_index(row, col)] = i;
 				}
 			}
 		}
@@ -385,7 +391,6 @@ class XL5Matrix {
 
 		// drop the matrix from memory
 		void drop() {
-			XL5Memory::delete_object();
 			XL5Memory::delete_object();
 			free(_matrix_elements);
 			_rows_count = 0;

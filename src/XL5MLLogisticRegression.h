@@ -14,18 +14,18 @@ class XL5MLLogisticRegression {
 	public:
 		void create(int num_of_features) {
 			XL5Memory::new_object();
-			_weights = new XL5Matrix<T>();
-		  _weights->create_random(num_of_features, 1, 0.0, 1.0);
+			_W = new XL5Matrix<T>();
+		  _W->create_random(num_of_features, 1, 0.0, 1.0);
 
 			XL5Random<T> random;
 			random.init();
-			_bias = random.get_value(0.0, 1.0);
-		  // _weights->log("LR Weights:", XL5Color::FG_BLUE, 2);
+			_b = random.get_value(0.0, 1.0);
+		  // _W->log("LR Weights:", XL5Color::FG_BLUE, 2);
 		}
 
 		T predict(XL5Matrix<T>* x_features) {
-			XL5Matrix<T>* Z = x_features.multiply(_weights);
-			Z.add(_bias);
+			XL5Matrix<T>* Z = x_features.multiply(_W);
+			Z.add(_b);
 			Z->drop();
 
 			XL5Memory::delete_object();
@@ -34,33 +34,28 @@ class XL5MLLogisticRegression {
 			return xl5ml_sigmoid(Z.sum());
 		}
 
-		void train(XL5Matrix<T>* x_features_samples, T target, T learning_rate) {
-			int rows = x_features_samples->rows_count();
+		void train(XL5Matrix<T>* X, T y, T learning_rate) {
+			T estimation = predict(X);
 
-			for(int i = 0; i < rows; ++i) {
-				 XL5Matrix<T>* X = x_features_samples->get_row();
-				T estimation = predict(X);
+			T diff = estimation - y;
+			X->multiply(diff);
+			X->multiply(learning_rate);
+			_W.subtract(X);
 
-				T diff = estimation - target;
-				X->multiply(diff);
-				X->multiply(learning_rate);
-				_weights.subtract(X);
+			_b -= learning_rate * diff;
 
-				_bias -= learning_rate * diff;
-
-				X->drop();
-				XL5Memory::delete_object();
-				delete X;
-			}
+			X->drop();
+			XL5Memory::delete_object();
+			delete X;
 		}
 
     void drop() {
 			XL5Memory::delete_object();
-		  _weights->drop();
-		  delete _weights;
+		  _W->drop();
+		  delete _W;
 		}
 
 	private:
-    XL5Matrix<T>* _weights;
-		T _bias = 0;
+    XL5Matrix<T>* _W;
+		T _b = 0;
 };

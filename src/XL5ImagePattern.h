@@ -4,13 +4,14 @@
 #include <limits>
 #include "XL5File.h"
 #include "XL5Image.h"
+#include "XL5MLLogisticRegression.h"
 #include "XL5Matrix.h"
 #include "XL5Stack.h"
 using namespace std;
 
-class XL5ImagePatterns {
+class XL5ImagePattern {
   public:
-    void load_paterns(const string& patterns_path) {
+    void load_patterns(const string& patterns_path) {
       XL5File file;
       XL5Memory::new_object();
       _patterns_buffer = new XL5Stack<XL5Matrix<uint8_t>*>();
@@ -30,10 +31,22 @@ class XL5ImagePatterns {
       delete files;
     }
 
-    void drop_patterns() {
+    void train_logistic_regression() {
+      XL5MLLogisticRegression<float> lr;
+      lr.create(_patterns_buffer->get(0)->cols_count());
+      for(int i = 0; i < _patterns_buffer->size(); ++i) {
+        // XL5Matrix<float>* X = _patterns_buffer->get(i);
+        // lr.train(XL5Matrix<T>* x_features_samples, T target, T learning_rate) {
+      }
+      lr.drop();
+    }
+
+    void drop() {
       for(int i = 0; i < _patterns_buffer->size(); ++i) {
          XL5Matrix<uint8_t>* pattern_data = _patterns_buffer->get(i);
          pattern_data->drop();
+         XL5Memory::delete_object();
+         delete pattern_data;
       }
 
       _patterns_buffer->drop();

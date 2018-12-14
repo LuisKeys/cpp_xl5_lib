@@ -4,6 +4,7 @@
 #include <tuple>
 #include "../XL5Image.h"
 #include "../XL5ImageFilter.h"
+#include "../XL5ImagePattern.h"
 #include "../XL5Log.h"
 #include "../XL5MLLogisticRegression.h"
 #include "../XL5Memory.h"
@@ -30,19 +31,23 @@ class TestXL5FastFaceRecognition {
       log.function_end("End faces recognition training", XL5Color::FG_BLUE);
     }
 
-  private:
-
     void _traing_mouth_lr() {
-      XL5MLLogisticRegression<float> lr;
-      lr.create(100);
-      lr.drop();
+      XL5ImagePattern patterns;
+      patterns.load_patterns("./data/mouths/");
+      patterns.train_logistic_regression();
+      patterns.drop();
     }
+
+    void train_logistic_regression() {
+    }
+
+  private:
 
     void _generate_faces_db() {
       for(int person_id = 1; person_id < 6; ++person_id) {
         if(person_id != 2 && person_id != 4 && person_id != 6) {
           for(int posse_id = 1; posse_id < 11; ++posse_id) {
-          _preprocess_face(person_id, posse_id);
+            _preprocess_face(person_id, posse_id);
           }
         }
       }

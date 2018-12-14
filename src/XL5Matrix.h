@@ -85,6 +85,20 @@ class XL5Matrix {
 			_matrix_elements[get_index(row, col)] = value;
 		}
 
+		// get a matrix row as a new single row matrix;
+		XL5Matrix<T>* get_row(int row) {
+			XL5Memory::new_object();
+			XL5Matrix<T>* R = new XL5Matrix<T>();
+			R->create(1, cols_count(), 0);
+
+			for(int col = 0; col < _cols_count; ++col) {
+					T value = _matrix_elements[get_index(row, col)];
+					R->set(1, col, value);
+			}
+
+			return R;
+		}
+
 		// traspose matrix
 		void traspose() {
 			int t_cols_count = _rows_count;
@@ -107,7 +121,7 @@ class XL5Matrix {
 		}
 
 		// multiply 2 matrices AxB = C (Current is A and provided is B, and return a pointer to C)
-		XL5Matrix<T> * multiply(XL5Matrix<T>* B) {
+		XL5Matrix<T>* multiply(XL5Matrix<T>* B) {
 			if(_cols_count != B->rows_count()) {
 				xl5_exc_cannot_multiply_matrices(_cols_count, B->cols_count());
 			}
@@ -167,6 +181,47 @@ class XL5Matrix {
 			}
 
 			return C;
+		}
+
+		// Add a scalar to a matrix
+		void add(T constant) {
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+						_matrix_elements[get_index(row, col)] += constant;
+				}
+			}
+		}
+
+		// Add a matrix
+		void add(XL5Matrix<T>* B) {
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+					T value = B->get_value(row, col);
+					_matrix_elements[get_index(row, col)] += value;
+				}
+			}
+		}
+
+		// Subtract a matrix
+		void subtract(XL5Matrix<T>* B) {
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+					T value = B->get_value(row, col);
+					_matrix_elements[get_index(row, col)] -= value;
+				}
+			}
+		}
+
+		// Add all the elements in the matrix and return an scalar
+		T add() {
+			T sum = 0;
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+						sum += _matrix_elements[get_index(row, col)];
+				}
+			}
+
+			return sum;
 		}
 
 		// multiply 2 matrices entry wise (Hadamard) AxB = C (Current is A and provided is B, and return a pointer to C)

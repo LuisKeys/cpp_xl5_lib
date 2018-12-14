@@ -3,8 +3,7 @@
 #include <iostream>
 #include <tuple>
 #include "../XL5Image.h"
-#include "../XL5ImageFilters.h"
-#include "../XL5ImagePatterns.h"
+#include "../XL5ImageFilter.h"
 #include "../XL5Log.h"
 #include "../XL5MLLogisticRegression.h"
 #include "../XL5Memory.h"
@@ -20,7 +19,6 @@ class TestXL5FastFaceRecognition {
   public:
     void test(int verbose) {
       XL5Log log;
-      XL5ImagePatterns image_patterns;
       log.function_start("Start faces recognition training", XL5Color::FG_BLUE);
 
       // Train mouthes recognition LR

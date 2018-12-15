@@ -48,7 +48,6 @@ class XL5Matrix {
 			}
 		}
 
-
 		// initialize a unit matrix
 		void init_unit() {
 			if (_rows_count != _cols_count) {
@@ -104,6 +103,7 @@ class XL5Matrix {
 			int t_cols_count = _rows_count;
 			int t_rows_count = _cols_count;
 
+			XL5Memory::new_object();
 			T* t_matrix_elements = (T*)malloc(sizeof(T) * _rows_count * _cols_count);
 			for(int row = 0; row < _rows_count; ++row) {
 				for(int col = 0; col < _cols_count; ++col) {
@@ -112,12 +112,52 @@ class XL5Matrix {
 			}
 
 			void drop();
-
-			XL5Memory::new_object();
+			XL5Memory::delete_object();
+			delete _matrix_elements;
 			_matrix_elements = t_matrix_elements;
 
 			_cols_count = t_cols_count;
 			_rows_count = t_rows_count;
+		}
+
+		// get min
+		T min() {
+			T min = numeric_limits<T>::max();
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+					T value = _matrix_elements[get_index(row, col)];
+					if(value < min) {
+						min = value;
+					}
+				}
+			}
+			return min;
+		}
+
+		// get max
+		T max() {
+			T max = numeric_limits<T>::min();
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+					T value = _matrix_elements[get_index(row, col)];
+					if(value < max) {
+						max = value;
+					}
+				}
+			}
+			return max;
+
+		}
+
+		// normalize matrix values
+		void normalize(T dest_min, T dest_max, T src_min, T src_max) {
+			T coef = (dest_max - dest_min + 1) / (src_max - src_min + 1);
+			T mean = (src_max - src_min + 1) / 2.0;
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+						_matrix_elements[get_index(row, col)] = (_matrix_elements[get_index(row, col)] - mean) * coef;
+				}
+			}
 		}
 
 		// multiply 2 matrices AxB = C (Current is A and provided is B, and return a pointer to C)
@@ -138,7 +178,7 @@ class XL5Matrix {
 						T sum = 0;
 						for( int a_col = 0; a_col < _cols_count; ++a_col) {
 							T a = _matrix_elements[get_index(c_row, a_col)];
-							T b = B->get(a_col, c_col);
+							T b = B->get(a_col, c_row);
 							sum += a * b;
 						}
 
@@ -206,7 +246,7 @@ class XL5Matrix {
 		void subtract(XL5Matrix<T>* B) {
 			for(int row = 0; row < _rows_count; ++row) {
 				for(int col = 0; col < _cols_count; ++col) {
-					T value = B->get_value(row, col);
+					T value = B->get(row, col);
 					_matrix_elements[get_index(row, col)] -= value;
 				}
 			}
@@ -222,6 +262,23 @@ class XL5Matrix {
 			}
 
 			return sum;
+		}
+
+		// Return linear horizontal version of matrix
+		XL5Matrix<T> * linear_horizontal() {
+			 XL5Memory::new_object();
+ 			XL5Matrix * Alh = new XL5Matrix();
+ 			Alh->create(1, rows_count() * cols_count(), 0);
+			int index = 0;
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+						T value = _matrix_elements[get_index(row, col)];
+						Alh->set(0, index, value);
+						++index;
+				}
+			}
+
+			return Alh;
 		}
 
 		// multiply 2 matrices entry wise (Hadamard) AxB = C (Current is A and provided is B, and return a pointer to C)
@@ -274,7 +331,7 @@ class XL5Matrix {
 			return Ainv;
 		}
 
-		// multiply 2 matrices entry wise (Hadamard) AxB = C (Current is A and provided is B, and return a pointer to C)
+		// Clone matrix
 		XL5Matrix<T> * clone() {
 			XL5Memory::new_object();
 			XL5Matrix<T> * Ac = new XL5Matrix<T>();
@@ -282,6 +339,20 @@ class XL5Matrix {
 			for(int row = 0; row < _rows_count; ++row) {
 				for(int col = 0; col < _cols_count; ++col) {
 					Ac->set(row, col, get(row, col));
+				}
+			}
+
+			return Ac;
+		}
+
+		// Clone matrix and cast elements to float
+		XL5Matrix<float> * clone_to_float() {
+			XL5Memory::new_object();
+			XL5Matrix<float> * Ac = new XL5Matrix<float>();
+			Ac->create(_rows_count, _cols_count, 0.0);
+			for(int row = 0; row < _rows_count; ++row) {
+				for(int col = 0; col < _cols_count; ++col) {
+					Ac->set(row, col, (float)get(row, col));
 				}
 			}
 

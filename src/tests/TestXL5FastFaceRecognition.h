@@ -38,9 +38,6 @@ class TestXL5FastFaceRecognition {
       patterns.drop();
     }
 
-    void train_logistic_regression() {
-    }
-
   private:
 
     void _generate_faces_db() {

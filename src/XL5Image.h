@@ -149,6 +149,8 @@ class XL5Image {
     void drop_pgm_gray() {
       if(_type == 5)
         _gray_channel->drop();
+        XL5Memory::delete_object();
+        delete _gray_channel;
     }
 
   private:

@@ -56,11 +56,16 @@ public:
                                                            (float)max_eyes_mouth_separation,
                                                            (float)max_eyes_mouth_separation - (float)min_eyes_mouth_separation);
 
-     float eyes_score = fuzzy.triangular_membership(get_eyes_delta_x(),
+      float eyes_score = fuzzy.triangular_membership(get_eyes_delta_x(),
                                                           (float)max_eyes_separation,
                                                           (float)max_eyes_separation - (float)min_eyes_separation);
 
-      return eyes_mouth_score + eyes_score;
+      // Global score
+      float eyes_coef = 1.2;
+      float eyes_mouth_coef = 0.8;
+      float global_score = eyes_coef * eyes_mouth_score + eyes_mouth_coef * eyes_score;
+      float global_score_norm = global_score / (eyes_coef + eyes_mouth_coef);
+      return global_score_norm;
     }
 
     // Write face data values to the console
@@ -143,7 +148,8 @@ class TestXL5FastFaceRecognition {
     XL5Stack<TestXL5FaceData*>* _faces_db;
 
     void _test_faces() {
-      for(int person_id = 1; person_id < 11; ++person_id) {
+      XL5Log log;
+      for(int person_id = 1; person_id < 5; ++person_id) {
         if(person_id != 2 && person_id != 3 && person_id != 4 && person_id != 6) {
           for(int posse_id = 1; posse_id < 2; ++posse_id) {
             auto areas = _preprocess_face(person_id, posse_id);
@@ -162,10 +168,21 @@ class TestXL5FastFaceRecognition {
 
               float score_db = face_data->get_face_hash();
               float score_test = face_data_test->get_face_hash();
-              if(score_db - score_test < 0.0001 && score_test > 0.25) {
-                std::cout << score_test << '\n';
-                std::cout << face_data->person_id << '\n';
-                std::cout << face_data_test->person_id << '\n';
+              if(score_db > 0.0 && score_test > 0.0 && abs(score_db - score_test) > 0.02) {
+                log.text_line("Candidate found!", XL5Color::FG_GREEN);
+                log.value_line(" - Score db:", score_db, XL5Color::FG_GREEN);
+                log.value_line(" - Score test:", score_test, XL5Color::FG_GREEN);
+                log.value_line(" - Test id:", face_data_test->person_id, XL5Color::FG_GREEN);
+                log.value(" - Candidate id:", face_data->person_id, XL5Color::FG_GREEN);
+              }
+              else {
+                if(face_data_test->person_id == face_data->person_id) {
+                  log.text_line("Candidate not found!", XL5Color::FG_YELLOW);
+                  log.value_line(" - Score db:", score_db, XL5Color::FG_YELLOW);
+                  log.value_line(" - Score test:", score_test, XL5Color::FG_YELLOW);
+                  log.value_line(" - Test id:", face_data_test->person_id, XL5Color::FG_YELLOW);
+                  log.value(" - Candidate id:", face_data->person_id, XL5Color::FG_YELLOW);
+                }
               }
             }
 

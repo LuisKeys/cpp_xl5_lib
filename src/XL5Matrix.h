@@ -359,6 +359,26 @@ class XL5Matrix {
 			return Ac;
 		}
 
+		// get area of matrix and return a clone of that area with elements casted to float
+		XL5Matrix<float> * get_area_to_float(XL5Rectangle<int>* area) {
+			XL5Memory::new_object();
+			XL5Matrix<float> * Ac = new XL5Matrix<float>();
+			Ac->create(area->get_height(), area->get_width(), 0.0);
+
+			int top = area->get_top();
+			int bottom = area->get_bottom();
+			int left = area->get_left();
+			int right = area->get_right();
+
+			for(int row = top; row < bottom; ++row) {
+				for(int col = left; col < right; ++col) {
+					Ac->set(row - top, col - left, (float)get(row, col));
+				}
+			}
+
+			return Ac;
+		}
+
 		// LU decomposition returns a tuple with <L, U> matrices
 		tuple<XL5Matrix<T> *, XL5Matrix<T> *> lu_decomposition() {
 			int n = _rows_count;

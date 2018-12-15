@@ -72,10 +72,11 @@ class XL5ImagePattern {
       delete files;
     }
 
-    void train_logistic_regression() {
+    XL5MLLogisticRegression<float>* train_logistic_regression() {
       XL5Log log;
-      XL5MLLogisticRegression<float> lr;
-      lr.create(_patterns_buffer->get(0)->cols_count());
+      XL5Memory::new_object();
+      _lr = new XL5MLLogisticRegression<float>();
+      _lr->create(_patterns_buffer->get(0)->cols_count());
 
       int counter = 0;
       std::cout << "Start training ----------------------------" << '\n';
@@ -83,9 +84,9 @@ class XL5ImagePattern {
         for(int i = 0; i < _patterns_buffer->size(); ++i) {
           XL5Matrix<float>* X = _patterns_buffer->get(i);
           counter++;
-          lr.train(X, _targets->get(i), 0.001);
+          _lr->train(X, _targets->get(i), 0.001);
           if(counter % 1000 == 0) {
-            std::cout << "Prediction:" << lr.get_estimation() << '\n';
+            std::cout << "Prediction:" << _lr->get_estimation() << '\n';
             std::cout << "Target:" << _targets->get(i) << '\n';
           }
         }
@@ -96,18 +97,19 @@ class XL5ImagePattern {
       for(int i = 0; i < _patterns_buffer->size(); ++i) {
         XL5Matrix<float>* X = _patterns_buffer->get(i);
         // X->log("X:", XL5Color::FG_YELLOW, 4);
-        lr.predict(X);
+        _lr->predict(X);
         int color = XL5Color::FG_GREEN;
 
-        if(_targets->get(i) != (int)lr.get_estimation()) {
+        if(_targets->get(i) != (int)_lr->get_estimation()) {
           color = XL5Color::FG_RED;
         }
-        log.value_line("Prediction", lr.get_estimation(), color);
-        log.value_line(" - Non rounded prediction", lr.get_non_rounded_estimation(), color);
+        log.value_line("Prediction", _lr->get_estimation(), color);
+        log.value_line(" - Non rounded prediction", _lr->get_non_rounded_estimation(), color);
         log.value(" - Target", _targets->get(i), color);
       }
       std::cout << "End testing ----------------------------" << '\n' << '\n';
-      lr.drop();
+
+      return _lr;
     }
 
     void drop() {
@@ -130,6 +132,7 @@ class XL5ImagePattern {
     }
 
   private:
+    XL5MLLogisticRegression<float>* _lr;
     XL5Stack<XL5Matrix<float>*>* _patterns_buffer;
     XL5Stack<int>* _targets;
 };

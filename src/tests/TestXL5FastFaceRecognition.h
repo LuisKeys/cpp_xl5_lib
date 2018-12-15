@@ -115,7 +115,7 @@ class TestXL5FastFaceRecognition {
   public:
     void test(int verbose) {
       XL5Log log;
-      log.function_start("Start faces recognition training", XL5Color::FG_YELLOW);
+      log.function_start("Start faces recognition training", XL5Color::FG_BLUE);
 
       // Train mouthes recognition LR
       _traing_mouth_lr();
@@ -123,14 +123,14 @@ class TestXL5FastFaceRecognition {
       // Generate faces DB
       _generate_faces_db();
 
-      log.function_end("End faces recognition training", XL5Color::FG_YELLOW);
+      log.function_end("End faces recognition training", XL5Color::FG_BLUE);
 
-      log.function_start("Start faces recognition test with fuzzy logic", XL5Color::FG_YELLOW);
+      log.function_start("Start faces recognition test with fuzzy logic", XL5Color::FG_BLUE);
 
       // test with fuzzy logic
       _test_faces();
 
-      log.function_end("End faces recognition training test with fuzzy logic", XL5Color::FG_YELLOW);
+      log.function_end("End faces recognition training test with fuzzy logic", XL5Color::FG_BLUE);
       // Clean all buffers and its elements
 
       _clean_buffers();
@@ -149,7 +149,7 @@ class TestXL5FastFaceRecognition {
 
     void _test_faces() {
       XL5Log log;
-      for(int person_id = 1; person_id < 5; ++person_id) {
+      for(int person_id = 1; person_id < 10; ++person_id) {
         if(person_id != 2 && person_id != 3 && person_id != 4 && person_id != 6) {
           for(int posse_id = 1; posse_id < 2; ++posse_id) {
             auto areas = _preprocess_face(person_id, posse_id);
@@ -168,7 +168,7 @@ class TestXL5FastFaceRecognition {
 
               float score_db = face_data->get_face_hash();
               float score_test = face_data_test->get_face_hash();
-              if(score_db > 0.0 && score_test > 0.0 && abs(score_db - score_test) > 0.02) {
+              if(score_db > 0.0 && score_test > 0.0 && abs(score_db - score_test) < 0.05) {
                 log.text_line("Candidate found!", XL5Color::FG_GREEN);
                 log.value_line(" - Score db:", score_db, XL5Color::FG_GREEN);
                 log.value_line(" - Score test:", score_test, XL5Color::FG_GREEN);
@@ -253,16 +253,12 @@ class TestXL5FastFaceRecognition {
             if(min_eyes_mouth_separation > face_data->get_eyes_mouth_delta_y()) {
               min_eyes_mouth_separation = face_data->get_eyes_mouth_delta_y();
             }
-            std::cout << face_data->person_id << '\n';
-            std::cout << min_eyes_mouth_separation << '\n';
           }
         }
 
         for(int i = 0; i < _faces_db->size(); ++i) {
           face_data = _faces_db->get(i);
           if(person_id == face_data->person_id) {
-            std::cout << face_data->person_id << '\n';
-            std::cout << min_eyes_mouth_separation << '\n';
             face_data->min_eyes_separation = min_eyes_separation;
             face_data->max_eyes_separation = max_eyes_separation;
             face_data->min_eyes_mouth_separation = min_eyes_mouth_separation;

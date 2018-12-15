@@ -61,7 +61,7 @@ public:
                                                           (float)max_eyes_separation - (float)min_eyes_separation);
 
       // Global score
-      float eyes_coef = 1.2;
+      float eyes_coef = 1.8;
       float eyes_mouth_coef = 0.8;
       float global_score = eyes_coef * eyes_mouth_score + eyes_mouth_coef * eyes_score;
       float global_score_norm = global_score / (eyes_coef + eyes_mouth_coef);

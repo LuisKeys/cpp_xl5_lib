@@ -10,7 +10,9 @@ class TestXL5Stack {
 		 	XL5Log log;
 		 	XL5Stack<float> stack;
 			int len = 4;
+			XL5Memory::new_object();
 		 	float* popped_numbers = new float(len);
+			XL5Memory::new_object();
 		 	float* numbers = new float(len);
 
 		 	numbers[0] = 10;
@@ -18,7 +20,7 @@ class TestXL5Stack {
 		 	numbers[2] = 36;
 		 	numbers[3] = 48;
 
-		 	stack.create(1000);
+		 	stack.create(1000, 100);
 
 		 	for(int i = 0; i < len; ++i) {
 			 	int status = stack.push(numbers[i]);
@@ -57,7 +59,7 @@ class TestXL5Stack {
 		 	}
 
 			if(verbose)
-				log.array("popped numbers", popped_numbers, len, XL5Color::FG_YELLOW);
+				log.array<float>("popped numbers", popped_numbers, len, XL5Color::FG_YELLOW);
 		 	/*
 		 	for(int i = 0; i < 11; ++i) {
 			 	int status = stack.push(numbers);

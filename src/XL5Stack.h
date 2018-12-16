@@ -1,6 +1,7 @@
 #pragma once
 
 #include "XL5Log.h"
+#include "XL5Memory.h"
 
 #define XL5_STACK_OK 0
 #define XL5_STACK_ERR_STACK_OVERFLOW 1
@@ -15,22 +16,28 @@ class XL5Stack {
 		}
 
 		// create a stack object
-		void create(int max_size) {
-			_stack_elements = (T*)malloc(sizeof(T));
+		void create(int max_size, int grow_size) {
+			XL5Memory::new_object();
+			_stack_elements = (T*)malloc((_alloc_space) * sizeof(T));
 			_max_size = max_size;
+			_grow_size = grow_size;
 		}
 
 		// push the provided object to the stack
 		int push(T data_object) {
-			T* test = (T*)realloc(_stack_elements, (_top + 1) * sizeof(T));
-			_stack_elements[_top] = data_object;
-
-			if(!test){
-				throw std::bad_alloc();
+			if(_top >= _alloc_space) {
+				_alloc_space = _top + _grow_size;
+				_stack_elements = (T*)realloc(_stack_elements, (_alloc_space) * sizeof(T));
 			}
 
-			// _stack_elements[_top] = data_object;
+			_stack_elements[_top] = data_object;
+
+			if(!_stack_elements){
+				throw bad_alloc();
+			}
+
 			++_top;
+
 			if(_top == _max_size) return XL5_STACK_ERR_STACK_OVERFLOW;
 
 			return XL5_STACK_OK;
@@ -72,7 +79,7 @@ class XL5Stack {
 			T* test = (T*)realloc(_stack_elements, (_top + 1) * sizeof(T));
 
 			if(!test){
-				throw std::bad_alloc();
+				throw bad_alloc();
 			}
 
 			++_top;
@@ -92,16 +99,27 @@ class XL5Stack {
 
 		// clear the stack
 		void clear() {
-			 free(_stack_elements);
+			XL5Memory::delete_object();
+		 	free(_stack_elements);
+			XL5Memory::new_object();
 			_stack_elements = (T*)malloc(sizeof(T));
 			_top = 0;
 		}
 
 		// drop the stack from memory
 		void drop() {
+			XL5Memory::delete_object();
 			free(_stack_elements);
 		}
 
+		// drop the stack from memory and delete memory counters
+		void drop_delete() {
+			for(int i = 0; i < size(); ++i) {
+				XL5Memory::delete_object();
+			}
+
+			free(_stack_elements);
+		}
 		// Print stack content for debug purposes
 		// Thie method only prints int or float values
 		void print() {
@@ -113,8 +131,22 @@ class XL5Stack {
 		 	}
 		}
 
+		// Write stack elements to the console
+		void log(const string& description, int color) {
+
+			cout << "\033[" << color << "m" << description << "\033[0m" << endl;
+
+			for(int i = 0; i < _top; ++i) {
+				cout << "\033[" << color << "m" << get(i) << endl;
+			}
+
+			cout << "\033[" << color << "m" << "\033[0m" << endl;
+
+		}
 	private:
 		T* _stack_elements;
 		int _top = 0;
+		int _grow_size = 0;
+		int _alloc_space = 0;
 		int _max_size = 0;
 };

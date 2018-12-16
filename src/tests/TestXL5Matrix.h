@@ -3,68 +3,156 @@
 #include <iostream>
 #include "../XL5Log.h"
 #include "../XL5Matrix.h"
+#include "../XL5Memory.h"
+
 
 class TestXL5Matrix {
 	public:
 		void test(int verbose) {
 		 	XL5Log log;
-			XL5Matrix<int> A;
-			XL5Matrix<int> B;
-			int rows = 2;
-			int cols = 2;
+			XL5Matrix<double> A;
+			XL5Matrix<double> B;
+			XL5Matrix<double>* L;
+			XL5Matrix<double>* U;
 
-			clear_console();
-
-			A.create(rows, cols);
-			B.create(rows, cols);
+			int rows = 4;
+			int cols = 4;
+			// Test matrix creation and initialize ops
+			A.create(rows, cols, 0);
+			B.create(rows, cols, 0);
 
 			A.init_unit();
 
-			if(verbose)
-				A.log("Matrix A > init to unit", XL5Color::FG_YELLOW);
+			// if(verbose)
+			// 	A.log("Matrix A > init to unit", XL5Color::FG_YELLOW, 2);
 
 			A.init_constant(2);
 
-			if(verbose)
-				A.log("Matrix A > init to 2", XL5Color::FG_YELLOW);
+			// if(verbose)
+			// 	A.log("Matrix A > init to 2", XL5Color::FG_YELLOW, 2);
 
 				A.set(0, 0, 1);
 				A.set(1, 0, 3);
 				A.set(1, 1, 4);
 
-				if(verbose)
-					A.log("Matrix A > modified", XL5Color::FG_YELLOW);
+				// if(verbose)
+				// 	A.log("Matrix A > modified", XL5Color::FG_YELLOW, 2);
 
 				A.drop();
 
-				rows = 2;
-				cols = 4;
+				// Test LUP decomposition
+				rows = 3;
+				cols = 3;
 
-				A.create(rows, cols);
+				A.create(rows, cols, 0);
 
-				A.init_random(1, 10);
+				// Sample from Cormen page 818
+				A.set(0, 0, 1);
+				A.set(0, 1, 2);
+				A.set(0, 2, 0);
 
-				if(verbose)
-					A.log("Matrix A > init to random from 1 to 10", XL5Color::FG_YELLOW);
+				A.set(1, 0, 3);
+				A.set(1, 1, 4);
+				A.set(1, 2, 4);
 
-				A.traspose();
+				A.set(2, 0, 5);
+				A.set(2, 1, 6);
+				A.set(2, 2, 3);
 
-				if(verbose)
-					A.log("Matrix A > transposed", XL5Color::FG_YELLOW);
+				int* pi;
+				tie(pi, L, U) = A.lup_decomposition();
 
-				B.init_random(1, 10);
+				if(verbose) {
+					A.log("Matrix A > init for Cormen sample p. 818", XL5Color::FG_YELLOW, 2);
+					L->log("Matrix L > init for Cormen sample p. 818", XL5Color::FG_YELLOW, 2);
+					U->log("Matrix U > init for Cormen sample p. 818", XL5Color::FG_YELLOW, 2);
+					log.array<int>("pi Array", pi, rows, XL5Color::FG_BLUE);
+				}
 
-				if(verbose)
-					B.log("Matrix B", XL5Color::FG_YELLOW);
+				// Test LUP solve
+				XL5Memory::new_object();
+				double* b = new double[3];
 
-				XL5Matrix<int>* C = A.multiply(&B);
+				b[0] = 3;
+				b[1] = 7;
+				b[2] = 8;
 
-				if(verbose)
-					C->log("Matrix C", XL5Color::FG_YELLOW);
+				double* x = A.lup_solve(L, U, pi, b);
+
+				if(verbose) {
+					log.array<double>("b Array", b, rows, XL5Color::FG_BLUE);
+					log.array<double>("resulting x Array", x, rows, XL5Color::FG_BLUE);
+				}
+
+				L->drop();
+				U->drop();
+
+				XL5Memory::delete_object();
+				delete L;
+
+				XL5Memory::delete_object();
+				delete U;
+
+				XL5Memory::delete_object();
+				delete pi;
+
+				XL5Memory::delete_object();
+				delete b;
+
+				// test invert opp
+				XL5Matrix<double>* Ainv = A.invert();
+
+				if(verbose) {
+					Ainv->log("Matrix Ainv > inverted matric of A", XL5Color::FG_GREEN, 2);
+				}
+
+				// Test if inverted matrix is correct
+				XL5Matrix<double>* I = A.multiply(Ainv);
+
+				if(verbose) {
+					I->log("Unit matrix > result of A * Ainv", XL5Color::FG_GREEN, 2);
+				}
+
+				Ainv->drop();
+				I->drop();
+				XL5Memory::delete_object();
+				delete Ainv;
+				XL5Memory::delete_object();
+				delete I;
+
+				// A.traspose();
+				//
+				// if(verbose)
+				// 	A.log("Matrix A > transposed", XL5Color::FG_YELLOW);
+				//
+				// B.init_random(1, 10);
+				//
+				// if(verbose)
+				// 	B.log("Matrix B", XL5Color::FG_YELLOW);
+				//
+				// XL5Matrix<double>* C = A.multiply(&B);
+				//
+				// if(verbose)
+				// 	C->log("Matrix C", XL5Color::FG_YELLOW);
+				//
+				// C->multiply(2);
+				//
+				// if(verbose)
+				// 	C->log("Matrix C * 2", XL5Color::FG_YELLOW);
+				//
+				// XL5Matrix<double>* D = A.multiply_entry_wise(&A);
+				//
+				// if(verbose)
+				// 	D->log("Matrix D", XL5Color::FG_YELLOW);
+
 
 				A.drop();
 				B.drop();
-				C->drop();
+				// C->drop();
+				// D->drop();
+
+				// delete C;
+				// delete D;
 
 			log.function_end("Test matrix (XL5Matrix) Passed Ok", XL5Color::BG_GREEN);
 		}

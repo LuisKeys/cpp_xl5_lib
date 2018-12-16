@@ -2,18 +2,22 @@
 
 #include "XL5Log.h"
 #include "XL5BinaryTreeNode.h"
+#include "XL5Memory.h"
+
 #define LOG_ENABLED 1
 // Binary tree object and all its related operations
 class XL5BinaryTree {
 	public:
 		// Create a tree with a root node with the provided key
 		XL5BinaryTreeNode* create(float key) {
+			XL5Memory::new_object();
 			_root = new XL5BinaryTreeNode(key);
 			return _root;
 		}
 
 		// Add left node to a provided parent node with a given key
 		XL5BinaryTreeNode* add_left(float key, XL5BinaryTreeNode* parent) {
+			XL5Memory::new_object();
 			XL5BinaryTreeNode* left = new XL5BinaryTreeNode(key, parent);
 			parent->set_left(left);
 			left->set_is_left(1);
@@ -22,6 +26,7 @@ class XL5BinaryTree {
 
 		// Add right node to a provided parent node with a given key
 		XL5BinaryTreeNode* add_right(float key, XL5BinaryTreeNode* parent) {
+			XL5Memory::new_object();
 			XL5BinaryTreeNode* right = new XL5BinaryTreeNode(key, parent);
 			parent->set_right(right);
 			right->set_is_left(0	);
@@ -142,6 +147,8 @@ class XL5BinaryTree {
 						if(node != _root) {
 							if(LOG_ENABLED == 1)
 								log.value("Node key", node->get_key(), XL5Color::FG_RED);
+
+							XL5Memory::delete_object();
 							delete node;
 						}
 

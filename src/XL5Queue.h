@@ -16,6 +16,7 @@ class XL5Queue {
 
 		// Creates a queue with the provided size
 		void create(int size) {
+			XL5Memory::new_object();
 			_queue_elements = new T[size];
 			_size = size;
 			_head = 0;
@@ -66,6 +67,7 @@ class XL5Queue {
 
 		// Drop the queue from memory
 		void drop() {
+			XL5Memory::delete_object();
 			delete _queue_elements;
 		}
 

@@ -10,7 +10,7 @@ float XL5Summary::max(float * input, int len) {
 	XL5Log log;
 	log.function_start("XL5Summary::max", XL5Color::FG_DEFAULT);
 
-  float max_result = std::numeric_limits<int>::min();
+  float max_result = numeric_limits<int>::min();
 
   for(int i = 0; i < len; ++i) {
     if(max_result < input[i])
@@ -28,7 +28,7 @@ float XL5Summary::min(float * input, int len) {
   XL5Log log;
   log.function_start("XL5Summary::max", XL5Color::FG_DEFAULT);
 
-  float min_result = std::numeric_limits<int>::max();
+  float min_result = numeric_limits<int>::max();
 
   for(int i = 0; i < len; ++i) {
     if(min_result > input[i])
@@ -54,4 +54,20 @@ float XL5Summary::sum(float * input, int len) {
 
 	log.function_end("XL5Summary::sum", XL5Color::FG_BLUE);
   return sum_result;
+}
+
+// Returns min of two values a and b
+float XL5Summary::min(int a, int b) {
+	if(a < b)
+		return a;
+	else
+		return b;
+}
+
+// Returns max of two values a and b
+float XL5Summary::max(int a, int b) {
+	if(a > b)
+		return a;
+	else
+		return b;
 }
